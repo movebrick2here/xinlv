@@ -92,30 +92,30 @@
 
 * 请求示例
 ```
-    {
-	   "product_code": "P1",
-	   "product_name_cn": "马来酸氨氯地平",
-	   "product_name_en": "Amlodipine Maleate",
-	   "product_cas": "88150-47-4",
-	   "molecular_formula": "C24H29ClN2O9",
-	   "molecular_weight": "524.9481",
-	   "constitutional_formula": "http://store.system.com/img/cf.png",
-	   "HS_Code": "2942000000",
-	   "category": "原料药",
-	   "physicochemical_property": "类白色或淡黄色结晶粉",
-	   "purpose": "抗高血压"
-	}
+{
+	"product_code": "P1",
+	"product_name_cn": "马来酸氨氯地平",
+	"product_name_en": "Amlodipine Maleate",
+	"product_cas": "88150-47-4",
+	"molecular_formula": "C24H29ClN2O9",
+	"molecular_weight": "524.9481",
+	"constitutional_formula": "http://store.system.com/img/cf.png",
+	"HS_Code": "2942000000",
+	"category": "原料药",
+	"physicochemical_property": "类白色或淡黄色结晶粉",
+	"purpose": "抗高血压"
+}
 ```
 * 应答示例
 ```
-   {
-	  "msg": "",
-	  "code": 0,
-	  "data": {
-	      "product_id": "P1f18348f32c9a4694f16426798937ae2",
-	      "product_name_cn": "马来酸氨氯地平"
-	  }
+{
+	"msg": "",
+	"code": 0,
+	"data": {
+	    "product_id": "P1f18348f32c9a4694f16426798937ae2",
+	    "product_name_cn": "马来酸氨氯地平"
 	}
+}
 ```
 ### 5.2 产品修改 <a name="product_update"/>
 * 请求URL:http://${DOMAIN}/api/v1/product/update
@@ -144,27 +144,27 @@
 
 * 请求示例
 ```
-    {
-       "product_id": "P1f18348f32c9a4694f16426798937ae2",
-	   "product_code": "P1",
-	   "product_name_cn": "马来酸氨氯地平",
-	   "product_name_en": "Amlodipine Maleate",
-	   "product_cas": "88150-47-4",
-	   "molecular_formula": "C24H29ClN2O9",
-	   "molecular_weight": "524.9481",
-	   "constitutional_formula": "http://store.system.com/img/cf.png",
-	   "HS_Code": "2942000000",
-	   "category": "原料药",
-	   "physicochemical_property": "类白色或淡黄色结晶粉",
-	   "purpose": "抗高血压"
-	}
+{
+    "product_id": "P1f18348f32c9a4694f16426798937ae2",
+	"product_code": "P1",
+	"product_name_cn": "马来酸氨氯地平",
+	"product_name_en": "Amlodipine Maleate",
+	"product_cas": "88150-47-4",
+	"molecular_formula": "C24H29ClN2O9",
+	"molecular_weight": "524.9481",
+	"constitutional_formula": "http://store.system.com/img/cf.png",
+	"HS_Code": "2942000000",
+	"category": "原料药",
+	"physicochemical_property": "类白色或淡黄色结晶粉",
+	"purpose": "抗高血压"
+}
 ```
 * 应答示例
 ```
-   {
-	  "msg": "",
-	  "code": 0
-	}
+{
+	"msg": "",
+	"code": 0
+}
 ```		
 ### 5.3 产品查询 <a name="product_query"/>
 * 请求URL:http://${DOMAIN}/api/v1/product/query
@@ -202,31 +202,31 @@
 
 * 请求示例
 ```
-    {
-       "product_id": "P1f18348f32c9a4694f16426798937ae2"
-	}
+{
+    "product_id": "P1f18348f32c9a4694f16426798937ae2"
+}
 ```
 
 * 应答示例
 ```
-   {
-	  "msg": "",
-	  "code": 0,
-	  "data": {
-          "product_id": "P1f18348f32c9a4694f16426798937ae2",
-	      "product_code": "P1",
-	      "product_name_cn": "马来酸氨氯地平",
-	      "product_name_en": "Amlodipine Maleate",
-	      "product_cas": "88150-47-4",
-	      "molecular_formula": "C24H29ClN2O9",
-	      "molecular_weight": "524.9481",
-	      "constitutional_formula": "http://store.system.com/img/cf.png",
-	      "HS_Code": "2942000000",
-	      "category": "原料药",
-	      "physicochemical_property": "类白色或淡黄色结晶粉",
-	      "purpose": "抗高血压"	  
-	  }
+{
+	"msg": "",
+	"code": 0,
+	"data": {
+        "product_id": "P1f18348f32c9a4694f16426798937ae2",
+	    "product_code": "P1",
+	    "product_name_cn": "马来酸氨氯地平",
+	    "product_name_en": "Amlodipine Maleate",
+	    "product_cas": "88150-47-4",
+	    "molecular_formula": "C24H29ClN2O9",
+	    "molecular_weight": "524.9481",
+	    "constitutional_formula": "http://store.system.com/img/cf.png",
+	    "HS_Code": "2942000000",
+	    "category": "原料药",
+	    "physicochemical_property": "类白色或淡黄色结晶粉",
+	    "purpose": "抗高血压"	  
 	}
+}
 ```
 		
 ## 8.状态码 <a name="status_code"/> 

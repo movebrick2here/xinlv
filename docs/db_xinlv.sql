@@ -21,8 +21,9 @@ CREATE TABLE `t_product` (
 
 CREATE TABLE `t_supplier` (
   `supplier_id`     varchar(128)      NOT NULL DEFAULT '' COMMENT '供应商ID',
+  `supplier_code`     varchar(128)      NOT NULL DEFAULT '' COMMENT '供应商CODE',
   `contact_name`   varchar(256)     NOT NULL DEFAULT '' COMMENT '联系人',
-  `sales_manager` varchar(256)     NOT NULL DEFAULT '' COMMENT '销售经理',
+  `position` varchar(256)     NOT NULL DEFAULT '' COMMENT '职位',
   `telephone` varchar(128)      NOT NULL DEFAULT '' COMMENT '座机',
   `mobile_number` varchar(128) NOT NULL DEFAULT '' COMMENT '手机',
   `email` varchar(128) NOT NULL DEFAULT '' COMMENT '邮箱',
@@ -32,6 +33,8 @@ CREATE TABLE `t_supplier` (
   `manufacturer_description` varchar(128) NOT NULL DEFAULT '' COMMENT '生产单位简介',
   `manufacturer_site` varchar(128) NOT NULL DEFAULT '' COMMENT '生产单位官网',
   `manufacturer_iso` tinyint NOT NULL DEFAULT 1 COMMENT 'ISO标准',
+  `haccp` tinyint NOT NULL DEFAULT 0 COMMENT 'HACCP',
+  `fsms` tinyint NOT NULL DEFAULT 0 COMMENT 'FSMS',
   `update_time` bigint NOT NULL DEFAULT 0 COMMENT '更新时间',
   `create_time` bigint NOT NULL DEFAULT 0 COMMENT '创建时间',
   PRIMARY KEY (`supplier_id`)
@@ -52,7 +55,8 @@ CREATE TABLE `t_product_supplier_ref` (
   `MF` tinyint NOT NULL DEFAULT 0 COMMENT 'MF',
   `KOSHER` tinyint NOT NULL DEFAULT 0 COMMENT 'KOSHER',
   `HALAL` tinyint NOT NULL DEFAULT 0 COMMENT 'HALAL',
-  `others` varchar(1024) NOT NULL DEFAULT 0 COMMENT '其他资质',
+  `others` varchar(2048) NOT NULL DEFAULT 0 COMMENT '其他资质',
+  `capacity` int NOT NULL DEFAULT 0 COMMENT '该产品年产能',
   `update_time` bigint NOT NULL DEFAULT 0 COMMENT '更新时间',
   `create_time` bigint NOT NULL DEFAULT 0 COMMENT '创建时间',
   PRIMARY KEY (`product_id`,`supplier_id`)

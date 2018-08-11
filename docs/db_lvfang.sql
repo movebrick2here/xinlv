@@ -1,5 +1,5 @@
-CREATE DATABASE db_xinlv default character set utf8mb4 collate utf8_general_ci;
-USE db_xinlv;
+CREATE DATABASE db_lvfang default character set utf8mb4;
+USE db_lvfang;
 
 CREATE TABLE `t_product` (
   `product_id`     varchar(128)      NOT NULL DEFAULT '' COMMENT '产品ID',

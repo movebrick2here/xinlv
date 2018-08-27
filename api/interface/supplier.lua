@@ -7,11 +7,11 @@
 
 -- Nginx HTTP SERVICE 配置中增加路径指向该文件
 -- 格式:
--- location ^~/interface/product/ {
+-- location ^~/interface/supplier/ {
 --     default_type 'text/plain';
---     content_by_lua_file ${HOME_DIR}/interface/product.lua;
+--     content_by_lua_file ${HOME_DIR}/interface/supplier.lua;
 -- }
--- 浏览器请求的地址是 http://${DOMAIN}/interface/product/${OP}
+-- 浏览器请求的地址是 http://${DOMAIN}/interface/supplier/${OP}
 -- DOMAIN 服务器部署的域名
 -- OP的值取决于代码中的实现
 
@@ -30,7 +30,7 @@
 -- result: bool 表示函数校验成功或者失败
 -- errmsg: string 表示函数失败的原因,函数校验成功时无需返回该值
 
--- RESTFUL API定义格式见 https://github.com/changyuezhou/api_base/blob/master/doc/product.md
+-- RESTFUL API定义格式见 https://github.com/changyuezhou/api_base/blob/master/doc/supplier.md
 -- *********************************************************************************************************
 
 -- #########################################################################################################
@@ -101,15 +101,10 @@ function check_add_params(tbl)
         return false, "POST数据格式错误"
     end
 
-    if (nil == tbl["product_name_cn"]) or
-            ("string" ~= type(tbl["product_name_cn"])) then
-        return false, "请检查参数product_name_cn.为必填且必须为字符型"
-    end
-
-    if (nil == tbl["product_name_en"]) or
-            ("string" ~= type(tbl["product_name_en"])) then
-        return false, "请检查参数product_name_en.为必填且必须为字符型"
-    end    
+    if (nil == tbl["supplier_code"]) or
+            ("string" ~= type(tbl["supplier_code"])) then
+        return false, "请检查参数supplier_code.为必填且必须为字符型"
+    end  
 
     return true
 end
@@ -128,14 +123,14 @@ function check_update_params(tbl)
         return false, "POST数据格式错误"
     end
 
-    if (nil == tbl["product_id"]) or
-            ("string" ~= type(tbl["product_id"])) then
-        return false, "请检查参数product_id.为必填且必须为字符型"
+    if (nil == tbl["supplier_id"]) or
+            ("string" ~= type(tbl["supplier_id"])) then
+        return false, "请检查参数supplier_id.为必填且必须为字符型"
     end
 
-    if (nil ~= tbl["product_name_cn"]) and
-            ("string" ~= type(tbl["product_name_cn"])) then
-        return false, "请检查参数product_name_cn.必须为字符型"
+    if (nil ~= tbl["supplier_code"]) and
+            ("string" ~= type(tbl["supplier_code"])) then
+        return false, "请检查参数supplier_code.必须为字符型"
     end
 
     return true
@@ -155,9 +150,9 @@ function check_query_params(tbl)
         return false, "POST数据格式错误"
     end
 
-    if (nil == tbl["product_id"]) or
-            ("string" ~= type(tbl["product_id"])) then
-        return false, "请检查参数product_id.为必填且必须为字符型"
+    if (nil == tbl["supplier_id"]) or
+            ("string" ~= type(tbl["supplier_id"])) then
+        return false, "请检查参数supplier_id.为必填且必须为字符型"
     end
 
     return true
@@ -177,9 +172,9 @@ function check_delete_params(tbl)
         return false, "POST数据格式错误"
     end
 
-    if (nil == tbl["product_ids"]) or
-            ("table" ~= type(tbl["product_ids"])) then
-        return false, "请检查参数product_ids.为必填且必须为字符数组"
+    if (nil == tbl["supplier_ids"]) or
+            ("table" ~= type(tbl["supplier_ids"])) then
+        return false, "请检查参数supplier_ids.为必填且必须为字符数组"
     end
 
     return true
@@ -310,7 +305,7 @@ end
 -- 返回值:
 -- op: string OP值
 -- 例子:
--- 浏览器请求URL:http://${DOMAIN}/interface/product/add
+-- 浏览器请求URL:http://${DOMAIN}/interface/supplier/add
 -- 该函数返回 add
 -- #########################################################################################################
 function get_request_op()
@@ -364,7 +359,7 @@ local OP = get_request_op()
 if OP == "add" then
     local result,errmsg = check_add_params(tbl)
     if true == result then
-        local business = require "product_add"
+        local business = require "supplier_add"
         local result, id = business:do_action(tbl)
         if false == result then
             response.code = ERR.USERINPUTLOGICAL
@@ -381,7 +376,7 @@ if OP == "add" then
 elseif OP == "update" then
     local result,errmsg = check_update_params(tbl)
     if true == result then
-        local business = require "product_update"
+        local business = require "supplier_update"
         local result,errmsg = business:do_action(tbl)
         if false == result then
             response.code = ERR.USERINPUTLOGICAL
@@ -394,8 +389,8 @@ elseif OP == "update" then
 elseif OP == "query" then
     local result,errmsg = check_query_params(tbl)
     if true == result then
-        local business = require "product_query"
-        local result,info = business:do_action(tbl.product_id)
+        local business = require "supplier_query"
+        local result,info = business:do_action(tbl.supplier_id)
         if false == result then
             response.code = ERR.USERINPUTLOGICAL
             response.msg = info
@@ -409,8 +404,8 @@ elseif OP == "query" then
 elseif OP == "delete" then
     local result,errmsg = check_delete_params(tbl)
     if true == result then
-        local business = require "product_delete"
-        local result,errmsg = business:do_action(tbl.product_ids)
+        local business = require "supplier_delete"
+        local result,errmsg = business:do_action(tbl.supplier_ids)
         if false == result then
             response.code = ERR.USERINPUTLOGICAL
             response.msg = errmsg
@@ -422,7 +417,7 @@ elseif OP == "delete" then
 elseif OP == "list" then
     local result,errmsg = check_query_list_params(tbl)
     if true == result then
-        local business = require "product_query_list"
+        local business = require "supplier_query_list"
         local result,info = business:do_action(tbl)
         if false == result then
             response.code = ERR.USERINPUTLOGICAL

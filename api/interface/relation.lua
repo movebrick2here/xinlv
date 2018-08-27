@@ -101,63 +101,79 @@ function check_add_params(tbl)
         return false, "POST数据格式错误"
     end
 
-    if (nil == tbl["product_name_cn"]) or
-            ("string" ~= type(tbl["product_name_cn"])) then
-        return false, "请检查参数product_name_cn.为必填且必须为字符型"
+    if (nil == tbl["product_code"]) or
+            ("string" ~= type(tbl["product_code"])) then
+        return false, "请检查参数product_code.为必填且必须为字符型"
     end
 
-    if (nil == tbl["product_name_en"]) or
-            ("string" ~= type(tbl["product_name_en"])) then
-        return false, "请检查参数product_name_en.为必填且必须为字符型"
-    end    
+    if (nil == tbl["supplier_code"]) or
+            ("string" ~= type(tbl["supplier_code"])) then
+        return false, "请检查参数supplier_code.为必填且必须为字符型"
+    end   
 
-    return true
-end
-
--- #########################################################################################################
--- 函数名: check_update_params
--- 函数功能: 校验接口 update 的参数
--- 参数定义:
--- tbl: POST请求过来的JSON数据,已经用cjson库转换成LUA TABLE
--- 返回值:
--- result: bool 表示函数成功或者失败
--- errmsg: string 表示函数失败的原因,函数校验成功时无需返回该值
--- #########################################################################################################
-function check_update_params(tbl)
-    if nil == tbl then
-        return false, "POST数据格式错误"
+    if (nil == tbl["quality_criterion"]) or
+            ("string" ~= type(tbl["quality_criterion"])) then
+        return false, "请检查参数quality_criterion.为必填且必须为字符型"
     end
 
-    if (nil == tbl["product_id"]) or
-            ("string" ~= type(tbl["product_id"])) then
-        return false, "请检查参数product_id.为必填且必须为字符型"
+    if (nil == tbl["packaging"]) or
+            ("string" ~= type(tbl["packaging"])) then
+        return false, "请检查参数packaging.为必填且必须为字符型"
+    end     
+
+    if (nil == tbl["gmp_cn"]) or
+            ("number" ~= type(tbl["gmp_cn"])) then
+        return false, "请检查参数gmp_cn.为必填且必须为整型"
+    end  
+
+    if (nil == tbl["gmp_eu"]) or
+            ("number" ~= type(tbl["gmp_eu"])) then
+        return false, "请检查参数gmp_eu.为必填且必须为整型"
+    end  
+
+    if (nil == tbl["FDA"]) or
+            ("number" ~= type(tbl["FDA"])) then
+        return false, "请检查参数FDA.为必填且必须为整型"
+    end  
+
+    if (nil == tbl["CEP"]) or
+            ("number" ~= type(tbl["CEP"])) then
+        return false, "请检查参数CEP.为必填且必须为整型"
+    end  
+
+    if (nil == tbl["US_DMF"]) or
+            ("number" ~= type(tbl["US_DMF"])) then
+        return false, "请检查参数US_DMF.为必填且必须为整型"
+    end 
+
+    if (nil == tbl["EU_DMF"]) or
+            ("number" ~= type(tbl["EU_DMF"])) then
+        return false, "请检查参数EU_DMF.为必填且必须为整型"
+    end 
+
+    if (nil == tbl["TGA"]) or
+            ("number" ~= type(tbl["TGA"])) then
+        return false, "请检查参数TGA.为必填且必须为整型"
+    end 
+
+    if (nil == tbl["MF"]) or
+            ("number" ~= type(tbl["MF"])) then
+        return false, "请检查参数MF.为必填且必须为整型"
     end
 
-    if (nil ~= tbl["product_name_cn"]) and
-            ("string" ~= type(tbl["product_name_cn"])) then
-        return false, "请检查参数product_name_cn.必须为字符型"
-    end
+    if (nil == tbl["KOSHER"]) or
+            ("number" ~= type(tbl["KOSHER"])) then
+        return false, "请检查参数KOSHER.为必填且必须为整型"
+    end 
 
-    return true
-end
+    if (nil == tbl["HALAL"]) or
+            ("number" ~= type(tbl["HALAL"])) then
+        return false, "请检查参数HALAL.为必填且必须为整型"
+    end 
 
--- #########################################################################################################
--- 函数名: check_query_params
--- 函数功能: 校验接口 query 的参数
--- 参数定义:
--- tbl: POST请求过来的JSON数据,已经用cjson库转换成LUA TABLE
--- 返回值:
--- result: bool 表示函数成功或者失败
--- errmsg: string 表示函数失败的原因,函数校验成功时无需返回该值
--- #########################################################################################################
-function check_query_params(tbl)
-    if nil == tbl then
-        return false, "POST数据格式错误"
-    end
-
-    if (nil == tbl["product_id"]) or
-            ("string" ~= type(tbl["product_id"])) then
-        return false, "请检查参数product_id.为必填且必须为字符型"
+    if (nil == tbl["capacity"]) or
+            ("number" ~= type(tbl["capacity"])) then
+        return false, "请检查参数capacity.为必填且必须为整型"
     end
 
     return true
@@ -177,9 +193,14 @@ function check_delete_params(tbl)
         return false, "POST数据格式错误"
     end
 
-    if (nil == tbl["product_ids"]) or
-            ("table" ~= type(tbl["product_ids"])) then
-        return false, "请检查参数product_ids.为必填且必须为字符数组"
+    if (nil ~= tbl["product_code"]) and
+            ("string" ~= type(tbl["product_code"])) then
+        return false, "请检查参数product_code.必须为字符型"
+    end
+
+    if (nil ~= tbl["supplier_code"]) and
+            ("string" ~= type(tbl["supplier_code"])) then
+        return false, "请检查参数supplier_code.必须为字符型"
     end
 
     return true
@@ -364,43 +385,11 @@ local OP = get_request_op()
 if OP == "add" then
     local result,errmsg = check_add_params(tbl)
     if true == result then
-        local business = require "product_add"
+        local business = require "relation_add"
         local result, id = business:do_action(tbl)
         if false == result then
             response.code = ERR.USERINPUTLOGICAL
             response.msg = id
-        else
-            response.data = {}
-            response.data.name = tbl.name
-            response.data.id = id
-        end
-    else
-        response.code = ERR.USERINPUTFORMAT
-        response.msg = errmsg
-    end
-elseif OP == "update" then
-    local result,errmsg = check_update_params(tbl)
-    if true == result then
-        local business = require "product_update"
-        local result,errmsg = business:do_action(tbl)
-        if false == result then
-            response.code = ERR.USERINPUTLOGICAL
-            response.msg = errmsg
-        end
-    else
-        response.code = ERR.USERINPUTFORMAT
-        response.msg = errmsg
-    end
-elseif OP == "query" then
-    local result,errmsg = check_query_params(tbl)
-    if true == result then
-        local business = require "product_query"
-        local result,info = business:do_action(tbl.product_id)
-        if false == result then
-            response.code = ERR.USERINPUTLOGICAL
-            response.msg = info
-        else
-            response.data = info
         end
     else
         response.code = ERR.USERINPUTFORMAT
@@ -409,8 +398,8 @@ elseif OP == "query" then
 elseif OP == "delete" then
     local result,errmsg = check_delete_params(tbl)
     if true == result then
-        local business = require "product_delete"
-        local result,errmsg = business:do_action(tbl.product_ids)
+        local business = require "relation_delete"
+        local result,errmsg = business:do_action(tbl)
         if false == result then
             response.code = ERR.USERINPUTLOGICAL
             response.msg = errmsg
@@ -422,7 +411,7 @@ elseif OP == "delete" then
 elseif OP == "list" then
     local result,errmsg = check_query_list_params(tbl)
     if true == result then
-        local business = require "product_query_list"
+        local business = require "relation_query_list"
         local result,info = business:do_action(tbl)
         if false == result then
             response.code = ERR.USERINPUTLOGICAL

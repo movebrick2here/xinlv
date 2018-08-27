@@ -7,10 +7,12 @@
 
 local Configure = {}
 
-Configure.DBCService = {}
-Configure.DBCService.IP = "127.0.0.1"
-Configure.DBCService.PORT = "10089"
-Configure.DBCService.DB = "db_ecp_v2"
+Configure.mysql = {}
+Configure.mysql.HOST = "127.0.0.1"
+Configure.mysql.PORT = "3306"
+Configure.mysql.DATABASE = "db_lvfang"
+Configure.mysql.USER = "root"
+Configure.mysql.PASSWORD = "suxin@2017"
 
 Configure.PLATFORM = {}
 Configure.PLATFORM.ID = "1"

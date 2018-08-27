@@ -5,7 +5,7 @@
 -- nginx.conf 配置文件HTTP SERVICE中增加一条语句: init_by_lua_file ${HOME_DIR}/initial/init.lua;
 -- 根据部署服务的路径,修改 HOME_DIR
 -- *********************************************************************************************************
-local HOME_DIR = "/usr/local/nginx/tointel/api"
+local HOME_DIR = "/home/suxin/dev/xinlv/api"
 local DIR_TABLES = {}
 
 function LoadPath(root)
@@ -28,3 +28,9 @@ for i = 1, #DIR_TABLES do
     package.path = package.path .. ";" .. DIR_TABLES[i] .. "/?.lua"
     package.path = package.path .. ";" .. DIR_TABLES[i] .. "/?.so"
 end
+
+local dao = require "mysql_db"
+local configure = require "configure"
+local mysql = configure.mysql
+
+-- dao:initial(mysql.HOST, mysql.PORT, mysql.DATABASE, mysql.USER, mysql.PASSWORD)

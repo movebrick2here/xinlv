@@ -243,7 +243,7 @@
 
 | 名称  | 类型 | 必填 | 描述 |
 | :--------| ----:| ----:| :--- |
-| product_id | string | 是 | 产品ID |
+| product_ids | string array | 是 | 产品ID |
 
 * 应答字段
 
@@ -255,7 +255,7 @@
 * 请求示例
 ```
 {
-    "product_id": "P1f18348f32c9a4694f16426798937ae2"
+    "product_ids": ["P1f18348f32c9a4694f16426798937ae2"]
 }
 ```
 
@@ -377,37 +377,6 @@
 	"code": 0
 }
 ```
-
-### 5.7 产品批量删除 <a name="product_batch_delete"/>
-* 请求URL:http://${DOMAIN}/api/v1/product/batch_delete
-* 请求字段:
-
-| 名称  | 类型 | 必填 | 描述 |
-| :--------| ----:| ----:| :--- |
-| product_ids |  string array | 是 | 产品ID |
-
-* 应答字段
-
-| 名称  | 类型 | 必填 | 描述 |
-| :--------| ----:| ----:| :--- |
-| code |  int  | 是 | 状态码 |
-| msg |  string  | 否 | 失败时的提示信息 |
-
-* 请求示例
-```
-{
-    "product_ids": ["P1f18348f32c9a4694f16426798937ae2"]
-}
-```
-
-* 应答示例
-```
-{
-	"msg": "",
-	"code": 0
-}
-```
-
 
 ## 6. 供应商管理 <a name="supplier_manage"/>
 ### 6.1 供应商增加 <a name="supplier_add"/>
@@ -625,7 +594,7 @@
 
 | 名称  | 类型 | 必填 | 描述 |
 | :--------| ----:| ----:| :--- |
-| supplier_id |  string  | 是 | 供应商ID |
+| supplier_ids |  string array  | 是 | 供应商ID |
 
 * 应答字段
 
@@ -638,7 +607,7 @@
 * 请求示例
 ```
 {
-    "supplier_id": "S1f18348f32c9a4694f16426798937ae2"
+    "supplier_ids": ["S1f18348f32c9a4694f16426798937ae2"]
 }
 ```
 
@@ -769,36 +738,6 @@
 }
 ```
 
-### 6.7 供应商批量删除 <a name="supplier_batch_delete"/>
-* 请求URL:http://${DOMAIN}/api/v1/supplier/batch_delete
-* 请求字段:
-
-| 名称  | 类型 | 必填 | 描述 |
-| :--------| ----:| ----:| :--- |
-| supplier_ids |  string array | 是 | 供应商ID |
-
-* 应答字段
-
-| 名称  | 类型 | 必填 | 描述 |
-| :--------| ----:| ----:| :--- |
-| code |  int  | 是 | 状态码 |
-| msg |  string  | 否 | 失败时的提示信息 |
-
-* 请求示例
-```
-{
-    "supplier_ids": ["S1f18348f32c9a4694f16426798937ae2"]
-}
-```
-
-* 应答示例
-```
-{
-	"msg": "",
-	"code": 0
-}
-```
-
 ## 7. 关联关系管理 <a name="relation_manage"/>
 ### 7.1 产品和供应商关联 <a name="relation_add"/>
 * 请求URL:http://${DOMAIN}/api/v1/relation/add
@@ -806,20 +745,20 @@
 
 | 名称  | 类型 | 必填 | 描述 |
 | :--------| ----:| ----:| :--- |
-| product_id | string | 是 | 产品ID |
-| supplier_id | string | 是 | 供应商ID |
+| product_code | string | 是 | 产品CODE |
+| supplier_code | string | 是 | 供应商CODE |
 | quality_criterion | string | 是 | 质量标准 |
 | packaging | string | 是 | 包装 |
-| gmp_cn | string | 是 | 中国GMP |
-| gmp_eu | string | 是 | 欧洲GMP |
-| FDA | string | 是 | FDA |
-| CEP | string | 是 | CEP |
-| US_DMF | string | 是 | US_DMF |
-| EU_DMF | string | 是 | EU_DMF |
-| TGA | string | 是 | TGA |
-| MF | bool | 是 | MF |
-| KOSHER | bool | 是 | KOSHER |
-| HALAL | bool | 是 | HALAL |
+| gmp_cn | int | 是 | 中国GMP |
+| gmp_eu | int | 是 | 欧洲GMP |
+| FDA | int | 是 | FDA |
+| CEP | int | 是 | CEP |
+| US_DMF | int | 是 | US_DMF |
+| EU_DMF | int | 是 | EU_DMF |
+| TGA | int | 是 | TGA |
+| MF | int | 是 | MF |
+| KOSHER | int | 是 | KOSHER |
+| HALAL | int | 是 | HALAL |
 | others | bool | 否 | 其他资质 |
 | capacity | int | 是 | 年产能,单位吨 |
 
@@ -842,20 +781,20 @@
 * 请求示例
 ```
 {
-	"product_id": "P1f18348f32c9a4694f16426798937ae2",
-	"supplier_id": "S1f18348f32c9a4694f16426798937ae2",
+	"product_code": "P1f18348f32c9a4694f16426798937ae2",
+	"supplier_code": "S1f18348f32c9a4694f16426798937ae2",
 	"quality_criterion": "CP2010",
 	"packaging": "25公斤桶",
-	"gmp_cn": true,
-	"gmp_eu": false,
-	"FDA": false,
-	"CEP": false,
-	"US_DMF": false,
-	"EU_DMF": false,
-	"TGA": false,
-	"MF": true,
-	"KOSHER": false,
-	"HALAL": false,
+	"gmp_cn": 1,
+	"gmp_eu": 0,
+	"FDA": 0,
+	"CEP": 0,
+	"US_DMF": 0,
+	"EU_DMF": 0,
+	"TGA": 0,
+	"MF": 0,
+	"KOSHER": 0,
+	"HALAL": 0,
 	"others": "",
 	"capacity": 200000
 }
@@ -870,13 +809,13 @@
 ```
 
 ### 7.2 产品和供应商解绑 <a name="relation_delete"/>
-* 请求URL:http://${DOMAIN}/api/v1/relation/
+* 请求URL:http://${DOMAIN}/api/v1/relation/delete
 * 请求字段:
 
 | 名称  | 类型 | 必填 | 描述 |
 | :--------| ----:| ----:| :--- |
-| product_id | string | 是 | 产品ID |
-| supplier_id | string | 是 | 供应商ID |
+| product_code | string | 是 | 产品CODE |
+| supplier_code | string | 是 | 供应商CODE |
 
 * 应答字段
 
@@ -888,8 +827,8 @@
 * 请求示例
 ```
 {
-	"product_id": "P1f18348f32c9a4694f16426798937ae2",
-	"supplier_id": "S1f18348f32c9a4694f16426798937ae2"
+	"product_code": "P1f18348f32c9a4694f16426798937ae2",
+	"supplier_code": "S1f18348f32c9a4694f16426798937ae2"
 }
 ```
   
@@ -939,8 +878,8 @@
 
 | 名称  | 类型 | 必填 | 描述 |
 | :--------| ----:| ----:| :--- |
-| product_id |  string  | 是 | 产品ID |
-| supplier_id |  string  | 否 | 供应商ID |
+| product_code |  string  | 是 | 产品ID |
+| supplier_code |  string  | 否 | 供应商ID |
 
 * 应答字段
 
@@ -954,8 +893,8 @@
 {
     "list": [
         {
-            "product_id": "P1f18348f32c9a4694f16426798937ae2",
-            "supplier_id": "S1f18348f32c9a4694f16426798937ae2"
+            "product_code": "P1f18348f32c9a4694f16426798937ae2",
+            "supplier_code": "S1f18348f32c9a4694f16426798937ae2"
         }
     ]
 }

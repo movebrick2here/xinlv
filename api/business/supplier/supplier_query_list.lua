@@ -4,23 +4,26 @@
 -- 文件实现了业务数据的逻辑检查,并调用数据库访问接口,将记录数据持久化到数据库
 -- 函数命名必须为小写字母加下划线区分功能单词 例:do_action
 
--- 表t_product结构
--- CREATE TABLE `t_product` (
---   `product_id`     varchar(128)      NOT NULL DEFAULT '' COMMENT '产品ID',
---   `product_code`   varchar(256)     NOT NULL DEFAULT '' COMMENT '产品代码',
---   `product_name_cn`   varchar(256)     NOT NULL DEFAULT '' COMMENT '产品中文名称',
---   `product_name_en` varchar(256)     NOT NULL DEFAULT '' COMMENT '产品英文名称',
---   `product_cas` varchar(128)      NOT NULL DEFAULT '' COMMENT '产品CAS号',
---   `molecular_formula` varchar(128) NOT NULL DEFAULT '' COMMENT '产品分子式',
---   `molecular_weight` varchar(128) NOT NULL DEFAULT '' COMMENT '产品分子量',
---   `constitutional_formula` varchar(1024) NOT NULL DEFAULT '' COMMENT '产品结构式',
---   `HS_Code` varchar(128) NOT NULL DEFAULT '' COMMENT '海关编码',
---   `category` varchar(128) NOT NULL DEFAULT '' COMMENT '所属类别',
---   `physicochemical_property` varchar(128) NOT NULL DEFAULT '' COMMENT '理化性质',
---   `purpose` varchar(128) NOT NULL DEFAULT '' COMMENT '用途',
+-- 表t_supplier结构
+-- CREATE TABLE `t_supplier` (
+--   `supplier_id`     varchar(128)      NOT NULL DEFAULT '' COMMENT '供应商ID',
+--   `supplier_code`     varchar(128)      NOT NULL DEFAULT '' COMMENT '供应商CODE',
+--   `contact_name`   varchar(256)     NOT NULL DEFAULT '' COMMENT '联系人',
+--   `position` varchar(256)     NOT NULL DEFAULT '' COMMENT '职位',
+--   `telephone` varchar(128)      NOT NULL DEFAULT '' COMMENT '座机',
+--   `mobile_number` varchar(128) NOT NULL DEFAULT '' COMMENT '手机',
+--   `email` varchar(128) NOT NULL DEFAULT '' COMMENT '邮箱',
+--   `manufacturer` varchar(1024) NOT NULL DEFAULT '' COMMENT '生产商',
+--   `manufacturer_belongs_area` varchar(128) NOT NULL DEFAULT '' COMMENT '生产商所属地区',
+--   `manufacturer_address` varchar(128) NOT NULL DEFAULT '' COMMENT '生产商单位地址',
+--   `manufacturer_description` varchar(128) NOT NULL DEFAULT '' COMMENT '生产单位简介',
+--   `manufacturer_site` varchar(128) NOT NULL DEFAULT '' COMMENT '生产单位官网',
+--   `manufacturer_iso` tinyint NOT NULL DEFAULT 1 COMMENT 'ISO标准',
+--   `haccp` tinyint NOT NULL DEFAULT 0 COMMENT 'HACCP',
+--   `fsms` tinyint NOT NULL DEFAULT 0 COMMENT 'FSMS',
 --   `update_time` bigint NOT NULL DEFAULT 0 COMMENT '更新时间',
 --   `create_time` bigint NOT NULL DEFAULT 0 COMMENT '创建时间',
---   PRIMARY KEY (`product_id`)
+--   PRIMARY KEY (`supplier_id`)
 -- ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 MAX_ROWS=200000 AVG_ROW_LENGTH=3000;
 -- *********************************************************************************************************
 
@@ -61,9 +64,9 @@ function business:get_total_records(where)
     -- 查询记录
     local sql = ""
     if 0 >= string.len(where) then
-        sql = "select count(*) as count from t_product"
+        sql = "select count(*) as count from t_supplier"
     else
-        sql = "select count(*) as count from t_product where " .. where .. ";"
+        sql = "select count(*) as count from t_supplier where " .. where .. ";"
     end
 
     local dao = require "mysql_db"
@@ -103,53 +106,69 @@ end
 function business:encode_sql_where(tbl)
     local where = ""
 
-    if nil ~= tbl.product_id then
+    if nil ~= tbl.supplier_id then
         if 0 < string.len(where) then
             where = where .. " and "
         end
 
-        where = where .. "product_id='" .. tbl.product_id .. "'"
+        where = where .. "supplier_id='" .. tbl.supplier_id .. "'"
     end
 
-    if nil ~= tbl.product_code then
+    if nil ~= tbl.supplier_code then
         if 0 < string.len(where) then
             where = where .. " and "
         end
 
-        where = where .. "product_code='" .. tbl.product_code .. "'"
+        where = where .. "supplier_code='" .. tbl.supplier_code .. "'"
     end
 
-    if nil ~= tbl.product_name_cn then
+    if nil ~= tbl.contact_name then
         if 0 < string.len(where) then
             where = where .. " and "
         end
 
-        where = where .. "product_name_cn='" .. tbl.product_name_cn .. "'"
+        where = where .. "contact_name='" .. tbl.contact_name .. "'"
     end
 
-    if nil ~= tbl.product_name_en then
+    if nil ~= tbl.mobile_number then
         if 0 < string.len(where) then
             where = where .. " and "
         end
 
-        where = where .. "product_name_en='" .. tbl.product_name_en .. "'"
+        where = where .. "mobile_number='" .. tbl.mobile_number .. "'"
     end
 
-    if nil ~= tbl.product_cas then
+    if nil ~= tbl.email then
         if 0 < string.len(where) then
             where = where .. " and "
         end
 
-        where = where .. "product_cas='" .. tbl.product_cas .. "'"
+        where = where .. "email='" .. tbl.email .. "'"
     end
 
-    if nil ~= tbl.purpose then
+    if nil ~= tbl.manufacturer then
         if 0 < string.len(where) then
             where = where .. " and "
         end
 
-        where = where .. "purpose='" .. tbl.purpose .. "'"
+        where = where .. "manufacturer='" .. tbl.manufacturer .. "'"
     end
+
+    if nil ~= tbl.manufacturer_belongs_area then
+        if 0 < string.len(where) then
+            where = where .. " and "
+        end
+
+        where = where .. "manufacturer_belongs_area='" .. tbl.manufacturer_belongs_area .. "'"
+    end
+
+     if nil ~= tbl.manufacturer_address then
+        if 0 < string.len(where) then
+            where = where .. " and "
+        end
+
+        where = where .. "manufacturer_address='" .. tbl.manufacturer_address .. "'"
+    end       
 
     return where    
 end
@@ -206,10 +225,10 @@ function business:do_action(tbl)
     local sql = ""
 
     if 0 >= string.len(where) then
-        sql = "select * from t_product " .. limit .. ";"
+        sql = "select * from t_supplier " .. limit .. ";"
     else
-        sql = "select * from t_product where " .. where .. limit .. ";"
-    end 
+        sql = "select * from t_supplier where " .. where .. limit .. ";"
+    end
 
     -- dao:initial(mysql.HOST, mysql.PORT, mysql.DATABASE, mysql.USER, mysql.PASSWORD)    
 

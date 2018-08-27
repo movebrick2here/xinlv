@@ -4,23 +4,26 @@
 -- 文件实现了业务数据的逻辑检查,并调用数据库访问接口,将记录数据持久化到数据库
 -- 函数命名必须为小写字母加下划线区分功能单词 例:do_action
 
--- 表t_product结构
--- CREATE TABLE `t_product` (
---   `product_id`     varchar(128)      NOT NULL DEFAULT '' COMMENT '产品ID',
---   `product_code`   varchar(256)     NOT NULL DEFAULT '' COMMENT '产品代码',
---   `product_name_cn`   varchar(256)     NOT NULL DEFAULT '' COMMENT '产品中文名称',
---   `product_name_en` varchar(256)     NOT NULL DEFAULT '' COMMENT '产品英文名称',
---   `product_cas` varchar(128)      NOT NULL DEFAULT '' COMMENT '产品CAS号',
---   `molecular_formula` varchar(128) NOT NULL DEFAULT '' COMMENT '产品分子式',
---   `molecular_weight` varchar(128) NOT NULL DEFAULT '' COMMENT '产品分子量',
---   `constitutional_formula` varchar(1024) NOT NULL DEFAULT '' COMMENT '产品结构式',
---   `HS_Code` varchar(128) NOT NULL DEFAULT '' COMMENT '海关编码',
---   `category` varchar(128) NOT NULL DEFAULT '' COMMENT '所属类别',
---   `physicochemical_property` varchar(128) NOT NULL DEFAULT '' COMMENT '理化性质',
---   `purpose` varchar(128) NOT NULL DEFAULT '' COMMENT '用途',
+-- 表t_supplier结构
+-- CREATE TABLE `t_supplier` (
+--   `supplier_id`     varchar(128)      NOT NULL DEFAULT '' COMMENT '供应商ID',
+--   `supplier_code`     varchar(128)      NOT NULL DEFAULT '' COMMENT '供应商CODE',
+--   `contact_name`   varchar(256)     NOT NULL DEFAULT '' COMMENT '联系人',
+--   `position` varchar(256)     NOT NULL DEFAULT '' COMMENT '职位',
+--   `telephone` varchar(128)      NOT NULL DEFAULT '' COMMENT '座机',
+--   `mobile_number` varchar(128) NOT NULL DEFAULT '' COMMENT '手机',
+--   `email` varchar(128) NOT NULL DEFAULT '' COMMENT '邮箱',
+--   `manufacturer` varchar(1024) NOT NULL DEFAULT '' COMMENT '生产商',
+--   `manufacturer_belongs_area` varchar(128) NOT NULL DEFAULT '' COMMENT '生产商所属地区',
+--   `manufacturer_address` varchar(128) NOT NULL DEFAULT '' COMMENT '生产商单位地址',
+--   `manufacturer_description` varchar(128) NOT NULL DEFAULT '' COMMENT '生产单位简介',
+--   `manufacturer_site` varchar(128) NOT NULL DEFAULT '' COMMENT '生产单位官网',
+--   `manufacturer_iso` tinyint NOT NULL DEFAULT 1 COMMENT 'ISO标准',
+--   `haccp` tinyint NOT NULL DEFAULT 0 COMMENT 'HACCP',
+--   `fsms` tinyint NOT NULL DEFAULT 0 COMMENT 'FSMS',
 --   `update_time` bigint NOT NULL DEFAULT 0 COMMENT '更新时间',
 --   `create_time` bigint NOT NULL DEFAULT 0 COMMENT '创建时间',
---   PRIMARY KEY (`product_id`)
+--   PRIMARY KEY (`supplier_id`)
 -- ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 MAX_ROWS=200000 AVG_ROW_LENGTH=3000;
 -- *********************************************************************************************************
 
@@ -34,8 +37,8 @@ local business = {}
 -- 返回值:
 -- result: bool true存在,false不存在
 -- #########################################################################################################
-function business:name_is_exists(code)
-    local sql = "select product_id from t_product where product_code='" .. code .. "'"
+function business:name_is_exists(name)
+    local sql = "select supplier_id from t_supplier where supplier_code='" .. name .. "'"
 
     local dao = require "mysql_db"
     local configure = require "configure"
@@ -65,8 +68,8 @@ end
 -- 返回值:
 -- result: bool true 对应,false不对应
 -- #########################################################################################################
-function business:id_name_is_consistent(id, code)
-    local sql = "select product_id from t_product where product_id='" .. id .. "' and product_code='" .. code .. "'"
+function business:id_name_is_consistent(id, name)
+    local sql = "select supplier_id from t_supplier where supplier_id='" .. id .. "' and supplier_code='" .. name .. "'"
 
     local dao = require "mysql_db"
     local configure = require "configure"
@@ -97,7 +100,7 @@ end
 -- result: bool true存在,false不存在
 -- #########################################################################################################
 function business:names_is_exists(codes)
-    local sql = "select product_code from t_product where product_code in (" .. codes .. ")"
+    local sql = "select supplier_code from t_supplier where supplier_code in (" .. codes .. ")"
 
     local dao = require "mysql_db"
     local configure = require "configure"

@@ -27,23 +27,46 @@
 local business = {}
 
 -- #########################################################################################################
--- 函数名: add_timestamp
+-- 函数名: encode_record_value
 -- 函数功能: 添加表中更新时间戳和创建时间戳
 -- 参数定义:
 -- tbl: table对象 记录值,key-value形式对
 -- 返回值:
 -- 无
 -- #########################################################################################################
-function business:add_timestamp(tbl)
-    local math = require "math"
-    local time_obj = require "socket"
-    tbl.update_time = math.ceil(time_obj.gettime())
-    tbl.create_time = math.ceil(time_obj.gettime())
+function business:encode_record_value(line)
+    local util = require "util"
+    local item_array = util.Split(line, ",")
+    local item_count = #item_array
+
+    if 11 ~= item_count then
+      return false, "line:" .. line .. " items is invalid"
+    end
 
     local uuid = require "uuid"
     local time_obj = require "socket"
     uuid.seed(time_obj.gettime()*10000)
     tbl.product_id = "P".. string.upper(uuid())
+
+    local value = "("
+    for i = 1, item_count do
+      if 1 == i then
+        value = value .. "'" .. tbl.product_id .. tostring(i) .. "'"
+      else
+        value = value .. "'" .. item_array[i] .. "'"
+      end
+      if i ~= item_count then
+        value = value .. ","
+      end
+    end
+
+    local math = require "math"
+    local time_obj = require "socket" 
+    value = value .. "," .. math.ceil(time_obj.gettime()) .. "," .. math.ceil(time_obj.gettime())
+
+    value = value .. ")"
+
+    return true, value, item_array[1]
 end
 
 -- #########################################################################################################
@@ -56,28 +79,49 @@ end
 -- errmsg: 失败是,返回失败描述信息
 -- #########################################################################################################
 function business:do_action(tbl)
+    -- 解析记录并组装SQL Values
+    local values = ""
+    
+    local util = require "util"
+    local line_array = util.Split(tbl, "\r")
+
+    local product_codes = ""
+    for i = 5, #line_array do
+        local line = string.gsub(line_array[i], "^%s*(.-)%s*$", "%1")
+        ngx.log(ngx.DEBUG, " ##### line:" .. line)
+        local ret_web, _ = string.find(line, "------WebKitFormBoundary")
+        local ret_content, _ = string.find(line, "Content")
+        if nil == ret_web and nil == ret_dis then
+            local result, value, product_code = business:encode_record_value(line)
+            if false == result then
+              return false, value
+            end
+
+            if 0 < string.len(product_codes) then
+              product_codes = product_codes .. ","
+            end
+            product_codes = product_codes .. product_code
+
+            if 0 < string.len(values) then
+              values = values .. ","
+            end
+            values = values .. value
+        end
+    end
 
     -- 检查名称是否重复
     local check = require "product_check"
-    local result,errmsg = check:name_is_exists(tbl.product_code)
+    local result,errmsg = check:names_is_exists(product_codes)
     if true == result then
-        return false, "数据库中已有CODE:".. tbl.product_code .. "的记录"
+        local cjson = require "cjson"
+        return false, "数据库中已有CODE:".. cjson.encode(errmsg) .. "的记录"
     end
-
-    -- 添加时间戳
-    business:add_timestamp(tbl)
 
     local columns = "(product_id, product_code, product_name_cn, product_name_en, product_cas, molecular_formula," ..
                     "molecular_weight, constitutional_formula, HS_Code, category, physicochemical_property, purpose," ..
                     "update_time,create_time)"
-    local value = "(" ..
-                   "'" .. tbl.product_id .. "','" .. tbl.product_code .. "','" .. tbl.product_name_cn .. "'," .. 
-                   "'" .. tbl.product_name_en .. "','" .. tbl.product_cas .. "','" .. tbl.molecular_formula .. "'," .. 
-                   "'" .. tbl.molecular_weight .. "','" .. tbl.constitutional_formula .. "','" .. tbl.HS_Code .. "'," .. 
-                   "'" .. tbl.category .. "','" .. tbl.physicochemical_property .. "','" .. tbl.purpose .. "'," ..
-                   tbl.update_time .. "," .. tbl.create_time ..
-                  ")"
-    local sql = "insert into t_product " .. columns .. " value " .. value
+
+    local sql = "insert into t_product " .. columns .. " values " .. values
 
     -- 添加记录到数据库
     local dao = require "mysql_db"
@@ -91,7 +135,9 @@ function business:do_action(tbl)
         return false
     end
 
-    return true, tbl.product_id
+    return true
+
 end
+
 
 return business

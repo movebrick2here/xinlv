@@ -348,6 +348,46 @@ if false == check_http_request_is_post() then
     ngx.exit(ngx.HTTP_OK)
 end
 
+-- 获取接口并处理
+local OP = get_request_op()
+
+if OP == "batch_add" then
+    ngx.req.read_body()
+    local body_data = ngx.req.get_body_data()
+    if nil == body_data then
+        local datafile = ngx.req.get_body_file()
+        if not datafile then
+            response.code = ERR.USERINPUTFORMAT
+            response.msg = "NGINX缓存POST文件数据失败"
+            ngx.say(cjson.encode(response))
+            ngx.exit(ngx.HTTP_OK)
+        end
+        local fh, err = io.open(datafile, "r")
+        if not fh then
+            response.code = ERR.USERINPUTFORMAT
+            response.msg = "读取NGINX缓存的文件数据失败"
+            ngx.say(cjson.encode(response))
+            ngx.exit(ngx.HTTP_OK)
+        end
+        fh:seek("set")
+        body_data = fh:read("*a")
+        fh:close()
+    end 
+
+    ngx.log(ngx.DEBUG, "read file length:" .. string.len(body_data))
+    
+    local business = require "product_batch_add"
+    local result,errmsg = business:do_action(body_data)
+    if false == result then
+        response.code = ERR.USERINPUTLOGICAL
+        response.msg = errmsg
+    end    
+
+    -- 返回数据
+    ngx.say(cjson.encode(response))
+    ngx.exit(ngx.HTTP_OK)
+end
+
 -- POST 数据转换为 TABLE
 local post_data_result, tbl = post_data_to_table()
 if false == post_data_result then
@@ -359,8 +399,6 @@ end
 
 -- ########################################################################################################
 
--- 获取接口并处理
-local OP = get_request_op()
 if OP == "add" then
     local result,errmsg = check_add_params(tbl)
     if true == result then

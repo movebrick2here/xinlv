@@ -36,7 +36,7 @@ local business = {}
 -- #########################################################################################################
 function business:encode_record_value(line)
     local util = require "util"
-    local item_array = util.Split(line, ",")
+    local item_array = util:Split(line, ",")
     local item_count = #item_array
 
     if 11 ~= item_count then
@@ -46,23 +46,17 @@ function business:encode_record_value(line)
     local uuid = require "uuid"
     local time_obj = require "socket"
     uuid.seed(time_obj.gettime()*10000)
-    tbl.product_id = "P".. string.upper(uuid())
+    local product_id = "P".. string.upper(uuid())
 
     local value = "("
+    value = value .. "'" .. product_id .. "',"
     for i = 1, item_count do
-      if 1 == i then
-        value = value .. "'" .. tbl.product_id .. tostring(i) .. "'"
-      else
-        value = value .. "'" .. item_array[i] .. "'"
-      end
-      if i ~= item_count then
-        value = value .. ","
-      end
+      value = value .. "'" .. item_array[i] .. "',"
     end
 
     local math = require "math"
     local time_obj = require "socket" 
-    value = value .. "," .. math.ceil(time_obj.gettime()) .. "," .. math.ceil(time_obj.gettime())
+    value = value .. math.ceil(time_obj.gettime()) .. "," .. math.ceil(time_obj.gettime())
 
     value = value .. ")"
 
@@ -83,10 +77,10 @@ function business:do_action(tbl)
     local values = ""
     
     local util = require "util"
-    local line_array = util.Split(tbl, "\r")
+    local line_array = util:Split(tbl, "\r")
 
     local product_codes = ""
-    for i = 5, #line_array do
+    for i = 1, #line_array do
         local line = string.gsub(line_array[i], "^%s*(.-)%s*$", "%1")
         ngx.log(ngx.DEBUG, " ##### line:" .. line)
         local ret_web, _ = string.find(line, "------WebKitFormBoundary")

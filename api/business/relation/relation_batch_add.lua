@@ -40,7 +40,7 @@ local business = {}
 -- #########################################################################################################
 function business:encode_record_value(line)
     local util = require "util"
-    local item_array = util.Split(line, ",")
+    local item_array = util:Split(line, ",")
     local item_count = #item_array
 
     if 16 ~= item_count then
@@ -49,19 +49,16 @@ function business:encode_record_value(line)
 
     local value = "("
     for i = 1, item_count do
-      value = value .. "'" .. item_array[i] .. "'"
-      if i ~= item_count then
-        value = value .. ","
-      end
+      value = value .. "'" .. item_array[i] .. "',"
     end
 
     local math = require "math"
     local time_obj = require "socket" 
-    value = value .. "," .. math.ceil(time_obj.gettime()) .. "," .. math.ceil(time_obj.gettime())
+    value = value .. math.ceil(time_obj.gettime()) .. "," .. math.ceil(time_obj.gettime())
     
     value = value .. ")"
 
-    return true, value
+    return true, value, item_array[1], item_array[2]
 end
 
 -- #########################################################################################################
@@ -78,18 +75,31 @@ function business:do_action(tbl)
     local values = ""
     
     local util = require "util"
-    local line_array = util.Split(tbl, "\r")
+    local line_array = util:Split(tbl, "\r")
 
-    for i = 5, #line_array do
+    local product_codes = ""
+    local supplier_codes = ""
+
+    for i = 1, #line_array do
         local line = string.gsub(line_array[i], "^%s*(.-)%s*$", "%1")
         ngx.log(ngx.DEBUG, " ##### line:" .. line)
         local ret_web, _ = string.find(line, "------WebKitFormBoundary")
         local ret_content, _ = string.find(line, "Content")
         if nil == ret_web and nil == ret_dis then
-            local result, value = business:encode_record_value(line)
+            local result, value, product_code, supplier_code = business:encode_record_value(line)
             if false == result then
               return false, value
             end
+
+            if 0 < string.len(product_codes) then
+              product_codes = product_codes .. ","
+            end
+            product_codes = product_codes .. product_code
+
+            if 0 < string.len(supplier_codes) then
+              supplier_codes = supplier_codes .. ","
+            end
+            supplier_codes = supplier_codes .. supplier_code
 
             if 0 < string.len(values) then
               values = values .. ","
@@ -98,11 +108,27 @@ function business:do_action(tbl)
         end
     end
 
+    -- 检查名称是否重复
+    local check = require "product_check"
+    local result,errmsg = check:names_is_exists(product_codes)
+    if false == result or #errmsg ~= #line_array then
+        local cjson = require "cjson"
+        return false, "数据库中有产品CODE: " .. product_codes .. " db:" .. cjson.encode(errmsg) .. "不存在的记录"
+    end   
+
+    -- 检查名称是否重复
+    local check = require "supplier_check"
+    local result,errmsg = check:names_is_exists(supplier_codes)
+    if false == result or #errmsg ~= #line_array then
+        local cjson = require "cjson"
+        return false, "数据库中有供应商CODE: " .. supplier_codes .. " db:" .. cjson.encode(errmsg) .. "不存在的记录"
+    end       
+
     local columns = "(product_code, supplier_code, quality_criterion, packaging, gmp_cn, gmp_eu," ..
                     "FDA, CEP, US_DMF, EU_DMF, TGA, MF,KOSHER, HALAL, others, capacity," ..
                     "update_time,create_time)"
 
-    local sql = "insert into t_product_supplier_ref " .. columns .. " values " .. values .. " ON DUPLICATE KEY UPDATE "
+    local sql = "insert into t_product_supplier_ref " .. columns .. " values " .. values
 
     -- 添加记录到数据库
     local dao = require "mysql_db"

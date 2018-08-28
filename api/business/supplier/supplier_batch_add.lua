@@ -59,7 +59,7 @@ end
 -- #########################################################################################################
 function business:encode_record_value(line)
     local util = require "util"
-    local item_array = util.Split(line, ",")
+    local item_array = util:Split(line, ",")
     local item_count = #item_array
 
     if 14 ~= item_count then
@@ -69,25 +69,17 @@ function business:encode_record_value(line)
     local uuid = require "uuid"
     local time_obj = require "socket"
     uuid.seed(time_obj.gettime()*10000)
-    tbl.supplier_id = "S".. string.upper(uuid())
+    local supplier_id = "P".. string.upper(uuid())
 
     local value = "("
+    value = value .. "'" .. supplier_id .. "',"
     for i = 1, item_count do
-      if 1 == i then
-        value = value .. "'" .. tbl.supplier_id .. tostring(i) .. "'"
-      else
-        value = value .. "'" .. item_array[i] .. "'"
-      end
-
-      if i ~= item_count then
-        value = value .. ","
-      end
-
+      value = value .. "'" .. item_array[i] .. "',"
     end
-    
+
     local math = require "math"
     local time_obj = require "socket" 
-    value = value .. "," .. math.ceil(time_obj.gettime()) .. "," .. math.ceil(time_obj.gettime())
+    value = value .. math.ceil(time_obj.gettime()) .. "," .. math.ceil(time_obj.gettime())
 
     value = value .. ")"
 
@@ -108,10 +100,10 @@ function business:do_action(tbl)
     local values = ""
     
     local util = require "util"
-    local line_array = util.Split(tbl, "\r")
+    local line_array = util:Split(tbl, "\r")
 
     local supplier_codes = ""
-    for i = 5, #line_array do
+    for i = 1, #line_array do
         local line = string.gsub(line_array[i], "^%s*(.-)%s*$", "%1")
         ngx.log(ngx.DEBUG, " ##### line:" .. line)
         local ret_web, _ = string.find(line, "------WebKitFormBoundary")
@@ -141,9 +133,6 @@ function business:do_action(tbl)
         local cjson = require "cjson"
         return false, "数据库中已有CODE:".. cjson.encode(errmsg) .. "的记录"
     end
-
-    -- 添加时间戳
-    business:add_timestamp(tbl)
 
     local columns = "(supplier_id, supplier_code, contact_name, position, telephone, mobile_number," ..
                     "email, manufacturer, manufacturer_belongs_area, manufacturer_address, manufacturer_description, manufacturer_site," ..

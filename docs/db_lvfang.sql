@@ -1,6 +1,19 @@
 CREATE DATABASE db_lvfang default character set utf8mb4;
 USE db_lvfang;
 
+-- 用户表
+CREATE TABLE `t_user` (
+  `user_id` varchar(128) NOT NULL DEFAULT '' COMMENT '用户ID',
+  `user_password` varchar(256) NOT NULL DEFAULT '' COMMENT '用户密码',
+  `user_name` varchar(256) NOT NULL DEFAULT '' COMMENT '用户名',
+  `contact` varchar(64) NOT NULL DEFAULT '' COMMENT '联系人',
+  `mobile_phone` varchar(64) NOT NULL DEFAULT '' COMMENT '移动电话',
+  `update_time` bigint(20) NOT NULL DEFAULT '0' COMMENT '更新时间',
+  `create_time` bigint(20) NOT NULL DEFAULT '0' COMMENT '创建时间',    
+  PRIMARY KEY (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 MAX_ROWS=10000 AVG_ROW_LENGTH=5000;
+
+
 CREATE TABLE `t_product` (
   `product_id`     varchar(128)      NOT NULL DEFAULT '' COMMENT '产品ID',
   `product_code`   varchar(256)     NOT NULL DEFAULT '' COMMENT '产品代码',

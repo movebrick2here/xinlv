@@ -26,7 +26,9 @@
 ### [7.3 产品和供应商批量关联](#relation_batch_add)
 ### [7.4 产品和供应商批量删除](#relation_batch_delete)
 ### [7.5 关联产品供应商列表](#relation_list)
-## [8 状态码](#status_code)
+## [8 用户管理](#user_manage)
+### [8.1 用户登录](#user_signin)
+## [9 状态码](#status_code)
 -------------------
 ## 1. 关于文档 <a name="about_doc"/>
    本文档作为管理系统与前端WEB UI进行联调的指引文档。主要包括以下几个个部分：
@@ -1043,8 +1045,43 @@
 	}	
 }
 ```
+## 8 用户管理 <a name="user_manage"/>
+### 8.1 用户登录 <a name="user_signin"/>
 
-## 8.状态码 <a name="status_code"/> 
+* 请求URL:http://${DOMAIN}/api/v1/user/signin
+* 请求字段:
+
+| 名称  | 类型 | 必填 | 描述 |
+| :--------| ----:| ----:| :--- |
+| timestamp | int | 是 | 时间戳 |
+| user_name | string | 是 | 用户名 |
+| password | string | 是 | 密码(md5(timestamp + md5(user input password))) |
+
+* 应答字段
+
+| 名称  | 类型 | 必填 | 描述 |
+| :--------| ----:| ----:| :--- |
+| code |  int  | 是 | 状态码 |
+| msg |  string  | 否 | 失败时的提示信息 |
+
+* 请求示例
+```
+{
+    "timestamp": 1533112230,
+    "user_name": "admin",
+    "password": "1f18348f32c9a4694f16426798937ae2"
+}
+```
+
+* 应答示例
+```
+{
+	"msg": "",
+	"code": 0
+}
+```
+
+## 9.状态码 <a name="status_code"/> 
 
 | 值  | 描述 |
 | :--------| ----:|

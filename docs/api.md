@@ -63,7 +63,7 @@
 
 ## 5. 产品管理 <a name="product_manage"/>
 ### 5.1 产品增加 <a name="product_add"/>
-* 请求URL:http://${DOMAIN}/api/v1/product/add
+* 请求URL:http://${DOMAIN}/interface/product/add
 * 请求字段:
 
 | 名称  | 类型 | 必填 | 描述 |
@@ -123,7 +123,7 @@
 }
 ```
 ### 5.2 产品修改 <a name="product_update"/>
-* 请求URL:http://${DOMAIN}/api/v1/product/update
+* 请求URL:http://${DOMAIN}/interface/product/update
 * 请求字段:
 
 | 名称  | 类型 | 必填 | 描述 |
@@ -174,7 +174,7 @@
 }
 ```		
 ### 5.3 产品查询 <a name="product_query"/>
-* 请求URL:http://${DOMAIN}/api/v1/product/query
+* 请求URL:http://${DOMAIN}/interface/product/query
 * 请求字段:
 
 | 名称  | 类型 | 必填 | 描述 |
@@ -240,7 +240,7 @@
 ```
 
 ### 5.4 产品删除 <a name="product_delete"/>
-* 请求URL:http://${DOMAIN}/api/v1/product/delete
+* 请求URL:http://${DOMAIN}/interface/product/delete
 * 请求字段:
 
 | 名称  | 类型 | 必填 | 描述 |
@@ -270,7 +270,7 @@
 ```
 
 ### 5.5 产品列表 <a name="product_list"/>
-* 请求URL:http://${DOMAIN}/api/v1/product/list
+* 请求URL:http://${DOMAIN}/interface/product/list
 * 请求字段:
 
 | 名称  | 类型 | 必填 | 描述 |
@@ -357,7 +357,7 @@
 ```
 
 ### 5.6 产品批量增加 <a name="product_batch_add"/>
-* 请求URL:http://${DOMAIN}/api/v1/product/batch_add
+* 请求URL:http://${DOMAIN}/interface/product/batch_add
 * 请求字段无:
 
 ```
@@ -382,7 +382,7 @@
 
 ## 6. 供应商管理 <a name="supplier_manage"/>
 ### 6.1 供应商增加 <a name="supplier_add"/>
-* 请求URL:http://${DOMAIN}/api/v1/supplier/add
+* 请求URL:http://${DOMAIN}/interface/supplier/add
 * 请求字段:
 
 | 名称  | 类型 | 必填 | 描述 |
@@ -450,7 +450,7 @@
 ```
 
 ### 6.2 供应商修改 <a name="supplier_update"/>
-* 请求URL:http://${DOMAIN}/api/v1/supplier/update
+* 请求URL:http://${DOMAIN}/interface/supplier/update
 * 请求字段:
 
 | 名称  | 类型 | 必填 | 描述 |
@@ -517,7 +517,7 @@
 ```
 
 ### 6.3 供应商查询 <a name="supplier_query"/>
-* 请求URL:http://${DOMAIN}/api/v1/supplier/query
+* 请求URL:http://${DOMAIN}/interface/supplier/query
 * 请求字段:
 
 | 名称  | 类型 | 必填 | 描述 |
@@ -591,7 +591,7 @@
 ```
 
 ### 6.4 供应商删除 <a name="supplier_delete"/>
-* 请求URL:http://${DOMAIN}/api/v1/supplier/delete
+* 请求URL:http://${DOMAIN}/interface/supplier/delete
 * 请求字段:
 
 | 名称  | 类型 | 必填 | 描述 |
@@ -623,7 +623,7 @@
 ```
 
 ### 6.5 供应商列表 <a name="supplier_list"/>
-* 请求URL:http://${DOMAIN}/api/v1/supplier/list
+* 请求URL:http://${DOMAIN}/interface/supplier/list
 * 请求字段:
 
 | 名称  | 类型 | 必填 | 描述 |
@@ -717,7 +717,7 @@
 ```
 
 ### 6.6 供应商批量增加 <a name="supplier_batch_add"/>
-* 请求URL:http://${DOMAIN}/api/v1/supplier/batch_add
+* 请求URL:http://${DOMAIN}/interface/supplier/batch_add
 * 请求字段无:
 
 ```
@@ -742,7 +742,7 @@
 
 ## 7. 关联关系管理 <a name="relation_manage"/>
 ### 7.1 产品和供应商关联 <a name="relation_add"/>
-* 请求URL:http://${DOMAIN}/api/v1/relation/add
+* 请求URL:http://${DOMAIN}/interface/relation/add
 * 请求字段:
 
 | 名称  | 类型 | 必填 | 描述 |
@@ -811,7 +811,7 @@
 ```
 
 ### 7.2 产品和供应商解绑 <a name="relation_delete"/>
-* 请求URL:http://${DOMAIN}/api/v1/relation/delete
+* 请求URL:http://${DOMAIN}/interface/relation/delete
 * 请求字段:
 
 | 名称  | 类型 | 必填 | 描述 |
@@ -843,7 +843,7 @@
 ```
 
 ### 7.3 产品和供应商批量关联 <a name="relation_batch_add"/>
-* 请求URL:http://${DOMAIN}/api/v1/relation/batch_add
+* 请求URL:http://${DOMAIN}/interface/relation/batch_add
 * 请求字段无:
 
 ```
@@ -869,7 +869,7 @@
 
 ### 7.4 产品和供应商批量删除 <a name="relation_batch_delete"/>
 
-* 请求URL:http://${DOMAIN}/api/v1/relation/batch_delete
+* 请求URL:http://${DOMAIN}/interface/relation/batch_delete
 * 请求字段:
 
 | 名称  | 类型 | 必填 | 描述 |
@@ -912,7 +912,7 @@
 
 ### 7.5 关联产品供应商列表 <a name="relation_list"/>
 
-* 请求URL:http://${DOMAIN}/api/v1/relation/list
+* 请求URL:http://${DOMAIN}/interface/relation/list
 * 请求字段:
 
 | 名称  | 类型 | 必填 | 描述 |
@@ -1048,7 +1048,7 @@
 ## 8 用户管理 <a name="user_manage"/>
 ### 8.1 用户登录 <a name="user_signin"/>
 
-* 请求URL:http://${DOMAIN}/api/v1/user/signin
+* 请求URL:http://${DOMAIN}/interface/user/signin
 * 请求字段:
 
 | 名称  | 类型 | 必填 | 描述 |

@@ -13,6 +13,15 @@ CREATE TABLE `t_user` (
   PRIMARY KEY (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 MAX_ROWS=10000 AVG_ROW_LENGTH=5000;
 
+-- 用户表
+CREATE TABLE `t_user_supplier` (
+  `open_id` varchar(128) NOT NULL DEFAULT '' COMMENT '用户OPEN ID',
+  `app_id` varchar(256) NOT NULL DEFAULT '' COMMENT 'APP ID',
+  `supplier_code` varchar(256) NOT NULL DEFAULT '' COMMENT '用户名',
+  `update_time` bigint(20) NOT NULL DEFAULT '0' COMMENT '更新时间',
+  `create_time` bigint(20) NOT NULL DEFAULT '0' COMMENT '创建时间',    
+  PRIMARY KEY (`open_id`, `supplier_code`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 MAX_ROWS=10000 AVG_ROW_LENGTH=5000;
 
 CREATE TABLE `t_product` (
   `product_id`     varchar(128)      NOT NULL DEFAULT '' COMMENT '产品ID',
@@ -99,9 +108,23 @@ CREATE VIEW `v_product_supplier` AS SELECT  a.product_id as product_id, a.produc
 &&
 DELIMITER ;
 
+DELIMITER &&
+CREATE VIEW `v_fans_supplier` AS SELECT b.supplier_id as supplier_id, b.supplier_code as supplier_code,
+                                    b.contact_name as contact_name, b.position as position,
+                                    b.telephone as telephone, b.mobile_number as mobile_number,
+                                    b.email as email, b.manufacturer as manufacturer,
+                                    b.manufacturer_belongs_area as manufacturer_belongs_area, b.manufacturer_address as manufacturer_address,
+                                    b.manufacturer_description as manufacturer_description, b.manufacturer_site as manufacturer_site,
+                                    b.manufacturer_iso as manufacturer_iso, b.haccp as haccp, b.fsms as fsms,
+                                    c.update_time as update_time, c.create_time as create_time
+                          FROM t_user_supplier c, t_supplier b
+                          WHERE c.supplier_code = b.supplier_code
+&&
+DELIMITER ;
+
 # insert into t_product value('96e79218965eb72c92a549dd5a330112', 'P1', '马来酸氨氯地平', 'Amlodipine Maleate', '88150-47-4', 'C24H29ClN2O9', '524.9481', '', '2942000000', '原料药', '类白色或淡黄色结晶粉', '抗高血压', 1533982299, 1533982299);
 # insert into t_supplier value('96e79218965eb72c92a549dd5a330112', 'S1', '张经理', '销售经理', '021-11111111', '13811111111', '111111@111.com', '上海朝晖药业有限公司', '中国上海', '上海市宝山区抚远路2151号', '上海朝晖是一家。。。年产能。。。', 'http://www.zhpharma.cn/', '1', '0', '0', 1533982299, 1533982299);
-
+# insert into t_user value('96e79218965eb72c92a549dd5a330112', '0cf81978bc74df7a82c544a7df68f822', 'admin', 'admin', '13800000000', 1533982299,1533982299);
 
 
 

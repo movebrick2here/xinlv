@@ -431,6 +431,26 @@ if OP == "signin" then
         response.code = ERR.USERINPUTFORMAT
         response.msg = errmsg
     end
+if OP == "my_supplier" then
+    local business = require "user_my_supplier"
+    local result, errmsg = business:do_action(open_id)
+    if false == result then
+        response.code = ERR.USERINPUTLOGICAL
+        response.msg = errmsg
+    end
+if OP == "save_supplier" then
+    local result,errmsg = check_sign_params(tbl)
+    if true == result then
+        local business = require "save_my_supplier"
+        local result, user_id = business:do_action(tbl)
+        if false == result then
+            response.code = ERR.USERINPUTLOGICAL
+            response.msg = user_id
+        end
+    else
+        response.code = ERR.USERINPUTFORMAT
+        response.msg = errmsg
+    end 
 else
     response.code = ERR.USERINPUTFORMAT
     response.msg = "无效的请求命令:" .. OP

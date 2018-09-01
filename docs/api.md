@@ -933,6 +933,7 @@
 | manufacturer_belongs_area | string | 是 | 生产商所属地区 |
 | manufacturer_address | string | 是 | 生产商单位地址 |
 
+
 * 应答字段
 
 | 名称  | 类型 | 必填 | 描述 |
@@ -972,6 +973,20 @@
 | manufacturer_iso | bool | 是 | ISO标准 |
 | haccp | bool | 是 | HACCP |
 | fsms | bool | 是 | FSMS |
+| quality_criterion | string | 是 | 质量标准 |
+| packaging | string | 是 | 包装 |
+| gmp_cn | int | 是 | 中国GMP |
+| gmp_eu | int | 是 | 欧洲GMP |
+| FDA | int | 是 | FDA |
+| CEP | int | 是 | CEP |
+| US_DMF | int | 是 | US_DMF |
+| EU_DMF | int | 是 | EU_DMF |
+| TGA | int | 是 | TGA |
+| MF | int | 是 | MF |
+| KOSHER | int | 是 | KOSHER |
+| HALAL | int | 是 | HALAL |
+| others | string | 否 | 其他资质 |
+| capacity | int | 是 | 年产能,单位吨 |
 | update_time | int | 是 | 更新时间 |
 | create_time | int | 是 | 创建时间 |
 
@@ -1037,7 +1052,21 @@
 	        "manufacturer_site": "http://www.zhpharma.cn/",
 	        "manufacturer_iso": true,
 	        "haccp": false,
-	        "fsms": false,	        
+	        "fsms": false,	 
+					"quality_criterion": "CP2010",
+					"packaging": "25公斤桶",
+					"gmp_cn": 1,
+					"gmp_eu": 0,
+					"FDA": 0,
+					"CEP": 0,
+					"US_DMF": 0,
+					"EU_DMF": 0,
+					"TGA": 0,
+					"MF": 0,
+					"KOSHER": 0,
+					"HALAL": 0,
+					"others": ["http://www.system.com/picture/1.jpg","http://www.system.com/picture/2.jpg"],
+					"capacity": 200000	               
 	        "update_time": 1533112230,
 	        "create_time": 1533112230
 	    }  

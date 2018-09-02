@@ -43,6 +43,72 @@ function business:results_string_to_number(info)
 end
 
 -- #########################################################################################################
+-- 函数名: add_session
+-- 函数功能: 记录中字符字段转换为整型字段
+-- 参数定义:
+-- user_id: 用户名
+-- 返回值:
+-- 无
+-- #########################################################################################################
+function business:add_session(user_name, access_token)
+    local math = require "math"
+    local time_obj = require "socket"
+       
+    local columns = "(user_id, access_token, access_token_create_time, access_token_expire)"
+    local value = "(" ..
+                   "'" .. user_name .. "','" .. access_token .. "'," .. math.ceil(time_obj.gettime()) .. "," .. 
+                   math.ceil(time_obj.gettime()) + 1800 ..
+                  ")"
+
+    local sql = "insert into t_session " .. columns .. " value " .. value
+
+    -- 添加记录到数据库
+    local dao = require "mysql_db"
+    local configure = require "configure"
+    local mysql = configure.mysql
+
+    ngx.log(ngx.DEBUG, "insert t_session sql:" .. sql)
+    local result,info = dao:execute(mysql.HOST, mysql.PORT, mysql.DATABASE, mysql.USER, mysql.PASSWORD, sql)
+    if not result then
+        ngx.log(ngx.ERR, "insert sql:" .. sql .. " failed")
+        return false
+    end 
+
+    return true    
+end
+
+-- #########################################################################################################
+-- 函数名: update_session
+-- 函数功能: 记录中字符字段转换为整型字段
+-- 参数定义:
+-- user_id: 用户名
+-- 返回值:
+-- 无
+-- #########################################################################################################
+function business:update_session(user_name, access_token)
+    local math = require "math"
+    local time_obj = require "socket"
+
+    local sql = "update t_session set access_token='" .. access_token .. "',access_token_create_time=" .. 
+                math.ceil(time_obj.gettime()) .. ",access_token_expire=" .. (math.ceil(time_obj.gettime()) + 1800) ..
+                " where user_id='" .. user_name .. "'"
+
+    -- 添加记录到数据库
+    local dao = require "mysql_db"
+    local configure = require "configure"
+    local mysql = configure.mysql
+
+    ngx.log(ngx.DEBUG, "update t_session sql:" .. sql)
+    local result,info = dao:execute(mysql.HOST, mysql.PORT, mysql.DATABASE, mysql.USER, mysql.PASSWORD, sql)
+    if not result then
+        ngx.log(ngx.ERR, "update sql:" .. sql .. " failed")
+        return false
+    end 
+
+    return true    
+end
+
+-- #########################################################################################################
 -- 函数名: do_action
 -- 函数功能: 查询单条记录
 -- 参数定义:
@@ -81,11 +147,35 @@ function business:do_action(tbl)
 
     local md5 = require 'md5'
 
-    local md5_as_hex   = md5.sumhexa(tostring(tbl.timestamp) .. info[1].user_password)
+    local md5_as_hex = md5.sumhexa(tbl.password)
 
-    if md5_as_hex ~= tbl.password then
+    if md5_as_hex ~= info[1].user_password then
+        ngx.log(ngx.DEBUG, "query user password:" .. info[1].user_password .. " input password:" .. tbl.password .. 
+            " md5 password:" .. md5_as_hex .. " success has no results ")
         return false, "用户密码错误"
     end
+
+    local math = require "math"
+    local time_obj = require "socket"
+
+    local access_token = md5.sumhexa(tbl.user_name .. math.ceil(time_obj.gettime()))
+    ngx.log(ngx.DEBUG, "user sign in user name:" .. tbl.user_name .. " access token:" .. access_token)
+
+    local query = require "user_is_signin"
+    local result,errmsg = query:user_name_is_exists(tbl.user_name)
+    if true == result then
+        business:update_session(tbl.user_name, access_token)
+    else
+        business:add_session(tbl.user_name, access_token)
+    end
+
+    local ck = require "cookie"
+    local cookie = ck:new()
+    if not cookie then
+        ngx.log(ngx.ERR, "cookie new err:" .. err)
+    end    
+    cookie:set({ key = configure.PC.USER_ID, value = tbl.user_name, path = "/", domain = configure.PC.DOMAIN, expires = ngx.cookie_time(ngx.time() + configure.PC.EXPIRE) })
+    cookie:set({ key = configure.PC.ACCESS_TOKEN, value = access_token, path = "/", domain = configure.PC.DOMAIN, expires = ngx.cookie_time(ngx.time() + configure.PC.EXPIRE) })
 
     return true, info
 end

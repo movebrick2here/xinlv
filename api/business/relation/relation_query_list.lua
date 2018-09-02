@@ -50,6 +50,9 @@ function business:results_string_to_number(info)
         if ( nil ~= info[i].update_time) then
             info[i]["update_time"] = tonumber(info[i].update_time)
         end
+        if ( nil == info[i].others) or "" == info[i].others then
+            info[i]["others"] = {}
+        end        
     end
 end
 

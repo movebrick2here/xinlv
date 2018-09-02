@@ -23,6 +23,16 @@ CREATE TABLE `t_user_supplier` (
   PRIMARY KEY (`open_id`, `supplier_code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 MAX_ROWS=10000 AVG_ROW_LENGTH=5000;
 
+CREATE TABLE `t_session` (
+  `id`     int(11)           NOT NULL AUTO_INCREMENT COMMENT 'ID',
+  `user_id`        varchar(128)      NOT NULL DEFAULT '' COMMENT '用户ID',
+  `access_token`   varchar(128)  NOT NULL DEFAULT '' COMMENT '访问TOKEN',
+  `access_token_create_time`  int(11)     NOT NULL DEFAULT 0 COMMENT '访问TOKEN创建时间',
+  `access_token_expire`  int(11)     NOT NULL DEFAULT 0 COMMENT '访问TOKEN过期时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 MAX_ROWS=200000 AVG_ROW_LENGTH=2000;
+
+
 CREATE TABLE `t_product` (
   `product_id`     varchar(128)      NOT NULL DEFAULT '' COMMENT '产品ID',
   `product_code`   varchar(256)     NOT NULL DEFAULT '' COMMENT '产品代码',

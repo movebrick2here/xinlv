@@ -31,6 +31,7 @@
 ### [8.1 用户登录](#user_signin)
 ### [8.2 我的供应商](#my_suppliers)
 ### [8.3 保存供应商](#save_suppliers)
+### [8.4 用户登录状态](#user_sign_status)
 ## [9 状态码](#status_code)
 -------------------
 ## 1. 关于文档 <a name="about_doc"/>
@@ -1218,9 +1219,8 @@
 
 | 名称  | 类型 | 必填 | 描述 |
 | :--------| ----:| ----:| :--- |
-| timestamp | int | 是 | 时间戳 |
 | user_name | string | 是 | 用户名 |
-| password | string | 是 | 密码(md5(timestamp + md5(user input password))) |
+| password | string | 是 | 用户密码 |
 
 * 应答字段
 
@@ -1232,9 +1232,8 @@
 * 请求示例
 ```
 {
-    "timestamp": 1533112230,
     "user_name": "admin",
-    "password": "1f18348f32c9a4694f16426798937ae2"
+    "password": "123456"
 }
 ```
 
@@ -1345,6 +1344,32 @@
 	"msg": "",
 	"code": 0
 }
+
+### 8.4 用户登录状态 <a name="user_sign_status"/>
+
+* 请求URL:http://${DOMAIN}/interface/user/sign_status
+* 请求字段:无
+
+* 应答字段
+
+| 名称  | 类型 | 必填 | 描述 |
+| :--------| ----:| ----:| :--- |
+| code |  int  | 是 | 状态码 |
+| msg |  string  | 否 | 失败时的提示信息 |
+
+* 请求示例
+```
+{
+}
+```
+
+* 应答示例
+```
+{
+	"msg": "",
+	"code": 0
+}
+```
 
 ## 9.状态码 <a name="status_code"/> 
 

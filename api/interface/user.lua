@@ -57,11 +57,11 @@ function check_pages_params(tbl)
         return false, "请检查参数page_number.必须为整型"
     end
 
-    if nil == tb.page_size then
+    if nil == tbl.page_size then
         page_size = 10
     end
 
-    if nil == tb.page_number then
+    if nil == tbl.page_number then
         page_number = 1
     end
 
@@ -112,11 +112,6 @@ function check_signin_params(tbl)
     if (nil == tbl["user_name"]) or
             ("string" ~= type(tbl["user_name"])) then
         return false, "请检查参数user_name.为必填且必须为字符型"
-    end
-
-    if (nil == tbl["timstamp"]) or
-            ("number" ~= type(tbl["timstamp"])) then
-        return false, "请检查参数timstamp.为必填且必须为整型"
     end
 
     if (nil == tbl["password"]) or
@@ -449,7 +444,7 @@ end
 -- 获取接口并处理
 local OP = get_request_op()
 if OP == "signin" then
-    local result,errmsg = check_sign_params(tbl)
+    local result,errmsg = check_signin_params(tbl)
     if true == result then
         local business = require "user_signin"
         local result, user_id = business:do_action(tbl)
@@ -461,6 +456,13 @@ if OP == "signin" then
         response.code = ERR.USERINPUTFORMAT
         response.msg = errmsg
     end
+elseif OP == "sign_status" then
+    local business = require "user_is_signin"
+    local result, user_id = business:do_action()
+    if false == result then
+        response.code = ERR.USERINPUTLOGICAL
+        response.msg = user_id
+    end  
 elseif OP == "my_supplier" then
     local query = require "query_open_id"
     local open_id = query:do_action()

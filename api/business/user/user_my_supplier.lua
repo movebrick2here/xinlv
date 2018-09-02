@@ -75,7 +75,10 @@ function business:do_action(open_id)
 
     if nil == info or true == util.is_empty_table(info) then
         ngx.log(ngx.DEBUG, "query open id:" .. open_id .. " success has no results ")
-        return false
+        
+        info.list = {}
+
+        return true, info
     end
 
     return true, info

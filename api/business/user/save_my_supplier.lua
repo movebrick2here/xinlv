@@ -19,6 +19,27 @@
 local business = {}
 
 -- #########################################################################################################
+-- 函数名: array_to_string
+-- 函数功能: 数组列表转换为字符串
+-- 参数定义:
+-- ids: id数组列表
+-- 返回值:
+-- ids_list: 返回字符串形式的id list,格式为:"1,2,3,4"
+-- #########################################################################################################
+function business:array_to_string(ids)
+    local id_list = ""
+    local num = #ids
+    for i = 1, num do
+        id_list = id_list .. "'" .. tostring(ids[i]) .. "'"
+        if i ~= num then
+            id_list = id_list .. ","
+        end
+    end
+
+    return id_list
+end
+
+-- #########################################################################################################
 -- 函数名: results_string_to_number
 -- 函数功能: 记录中字符字段转换为整型字段
 -- 参数定义:
@@ -73,12 +94,25 @@ end
 -- info: 成功时返回,对象信息
 -- #########################################################################################################
 function business:do_action(open_id, tbl)
+    -- 解析记录并组装SQL Values
+    local util = require "util"
+    local codes_count = util:table_length(tbl.supplier_codes)
 
--- 解析记录并组装SQL Values
+    -- 数组转换字符串
+    local ids_list = business:array_to_string(tbl.supplier_codes)
+
+    -- 检查名称是否重复
+    local check = require "supplier_check"
+    local result,errmsg = check:names_is_exists(ids_list)
+    if false == result or #errmsg ~= codes_count then
+        local cjson = require "cjson"
+        return false, "数据库中有供应商CODE: " .. ids_list .. " db:" .. cjson.encode(errmsg) .. "不存在的记录"
+    end
+
     local values = ""
 
-    for i = 1, #tbl.supplier_codes do
-        ngx.log(ngx.DEBUG, " ##### supplier_code :" .. tbl.supplier_codes)
+    for i = 1, codes_count do
+        ngx.log(ngx.DEBUG, " ##### supplier_code :" .. tbl.supplier_codes[i])
         local result, value = business:encode_record_value(open_id, tbl.supplier_codes[i])
         if 0 < string.len(values) then
           values = values .. ","

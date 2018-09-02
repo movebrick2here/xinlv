@@ -47,16 +47,24 @@ function check_pages_params(tbl)
         return false, "POST数据格式错误"
     end
 
-    if (nil == tbl["page_number"]) or
-            ("number" ~= type(tbl["page_number"])) then
-        return false, "请检查参数page_number.为必填且必须为整型"
-    end
-
-    if (nil == tbl["page_size"]) or
+    if (nil ~= tbl["page_size"]) and
             ("number" ~= type(tbl["page_size"])) then
-        return false, "请检查参数page_size.为必填且必须为整型"
+        return false, "请检查参数page_size.必须为整型"
     end
 
+    if (nil ~= tbl["page_number"]) and
+            ("number" ~= type(tbl["page_number"])) then
+        return false, "请检查参数page_number.必须为整型"
+    end
+
+    if nil == tb.page_size then
+        page_size = 10
+    end
+
+    if nil == tb.page_number then
+        page_number = 1
+    end
+    
     return true
 end
 

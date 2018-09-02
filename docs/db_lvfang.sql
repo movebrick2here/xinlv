@@ -15,9 +15,9 @@ CREATE TABLE `t_user` (
 
 -- 用户表
 CREATE TABLE `t_user_supplier` (
-  `open_id` varchar(128) NOT NULL DEFAULT '' COMMENT '用户OPEN ID',
+  `open_id` varchar(64) NOT NULL DEFAULT '' COMMENT '用户OPEN ID',
   `app_id` varchar(256) NOT NULL DEFAULT '' COMMENT 'APP ID',
-  `supplier_code` varchar(256) NOT NULL DEFAULT '' COMMENT '用户名',
+  `supplier_code` varchar(64) NOT NULL DEFAULT '' COMMENT '用户名',
   `update_time` bigint(20) NOT NULL DEFAULT '0' COMMENT '更新时间',
   `create_time` bigint(20) NOT NULL DEFAULT '0' COMMENT '创建时间',    
   PRIMARY KEY (`open_id`, `supplier_code`)
@@ -116,6 +116,7 @@ CREATE VIEW `v_fans_supplier` AS SELECT b.supplier_id as supplier_id, b.supplier
                                     b.manufacturer_belongs_area as manufacturer_belongs_area, b.manufacturer_address as manufacturer_address,
                                     b.manufacturer_description as manufacturer_description, b.manufacturer_site as manufacturer_site,
                                     b.manufacturer_iso as manufacturer_iso, b.haccp as haccp, b.fsms as fsms,
+                                    c.open_id as open_id,
                                     c.update_time as update_time, c.create_time as create_time
                           FROM t_user_supplier c, t_supplier b
                           WHERE c.supplier_code = b.supplier_code

@@ -47,14 +47,22 @@ function check_pages_params(tbl)
         return false, "POST数据格式错误"
     end
 
-    if (nil == tbl["page_size"]) or
+    if (nil ~= tbl["page_size"]) and
             ("number" ~= type(tbl["page_size"])) then
-        return false, "请检查参数page_size.为必填且必须为整型"
+        return false, "请检查参数page_size.必须为整型"
     end
 
-    if (nil == tbl["page_number"]) or
+    if (nil ~= tbl["page_number"]) and
             ("number" ~= type(tbl["page_number"])) then
-        return false, "请检查参数page_number.为必填且必须为整型"
+        return false, "请检查参数page_number.必须为整型"
+    end
+
+    if nil == tb.page_size then
+        page_size = 10
+    end
+
+    if nil == tb.page_number then
+        page_number = 1
     end
 
     return true
@@ -114,6 +122,28 @@ function check_signin_params(tbl)
     if (nil == tbl["password"]) or
             ("string" ~= type(tbl["password"])) then
         return false, "请检查参数password.为必填且必须为字符型"
+    end
+
+    return true
+end
+
+-- #########################################################################################################
+-- 函数名: check_save_supplier_params
+-- 函数功能: 校验接口 add 的参数
+-- 参数定义:
+-- tbl: POST请求过来的JSON数据,已经用cjson库转换成LUA TABLE
+-- 返回值:
+-- result: bool 表示函数成功或者失败
+-- errmsg: string 表示函数失败的原因,函数校验成功时无需返回该值
+-- #########################################################################################################
+function check_save_supplier_params(tbl)
+    if nil == tbl then
+        return false, "POST数据格式错误"
+    end
+
+    if (nil == tbl["supplier_codes"]) or
+            ("table" ~= type(tbl["supplier_codes"])) then
+        return false, "请检查参数supplier_codes.为必填且必须为字符数组"
     end
 
     return true
@@ -431,22 +461,38 @@ if OP == "signin" then
         response.code = ERR.USERINPUTFORMAT
         response.msg = errmsg
     end
-if OP == "my_supplier" then
-    local business = require "user_my_supplier"
-    local result, errmsg = business:do_action(open_id)
-    if false == result then
+elseif OP == "my_supplier" then
+    local query = require "query_open_id"
+    local open_id = query:do_action()
+    if nil == open_id or "" == open_id then
         response.code = ERR.USERINPUTLOGICAL
-        response.msg = errmsg
-    end
-if OP == "save_supplier" then
-    local result,errmsg = check_sign_params(tbl)
-    if true == result then
-        local business = require "save_my_supplier"
-        local result, user_id = business:do_action(tbl)
+        response.msg = "获取不到用户open_id"        
+    else
+        local business = require "user_my_supplier"
+        local result, errmsg = business:do_action(open_id)
         if false == result then
             response.code = ERR.USERINPUTLOGICAL
-            response.msg = user_id
-        end
+            response.msg = errmsg
+        else
+            response.data = errmsg
+        end        
+    end
+elseif OP == "save_supplier" then
+    local result,errmsg = check_save_supplier_params(tbl)
+    if true == result then
+        local query = require "query_open_id"
+        local open_id = query:do_action()
+        if nil == open_id or "" == open_id then
+            response.code = ERR.USERINPUTLOGICAL
+            response.msg = "获取不到用户open_id"        
+        else
+            local business = require "save_my_supplier"
+            local result, user_id = business:do_action(open_id, tbl)
+            if false == result then
+                response.code = ERR.USERINPUTLOGICAL
+                response.msg = user_id
+            end       
+        end        
     else
         response.code = ERR.USERINPUTFORMAT
         response.msg = errmsg
@@ -456,6 +502,7 @@ else
     response.msg = "无效的请求命令:" .. OP
 end
 
+cjson.encode_empty_table_as_object(false)
 -- 返回数据
 ngx.say(cjson.encode(response))
 ngx.exit(ngx.HTTP_OK)

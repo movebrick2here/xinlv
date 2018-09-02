@@ -1344,6 +1344,7 @@
 	"msg": "",
 	"code": 0
 }
+```
 
 ### 8.4 用户登录状态 <a name="user_sign_status"/>
 

@@ -25,25 +25,24 @@
 --   `status` tinyint      NOT NULL DEFAULT 1 COMMENT '审核状态 0 未审核， 1 已审核',
 --   `update_time` bigint NOT NULL DEFAULT 0 COMMENT '更新时间',
 --   `create_time` bigint NOT NULL DEFAULT 0 COMMENT '创建时间',
---   PRIMARY KEY (`product_code`,`supplier_code`)
+--   PRIMARY KEY (`product_supplier_ref_id`,`supplier_id`)
 -- ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 MAX_ROWS=200000 AVG_ROW_LENGTH=3000;
 -- *********************************************************************************************************
 
 local business = {}
 
 -- #########################################################################################################
--- 函数名: add_timestamp
+-- 函数名: encode_record_value
 -- 函数功能: 添加表中更新时间戳和创建时间戳
 -- 参数定义:
 -- tbl: table对象 记录值,key-value形式对
 -- 返回值:
 -- 无
 -- #########################################################################################################
-function business:add_timestamp(tbl)
-    local math = require "math"
-    local time_obj = require "socket"
-    tbl.update_time = math.ceil(time_obj.gettime())
-    tbl.create_time = math.ceil(time_obj.gettime())
+function business:encode_record_value(product_code, supplier_code)
+    local value = "(product_code='" .. product_code .. "' and supplier_code = '" .. supplier_code .. "')"
+
+    return true
 end
 
 -- #########################################################################################################
@@ -56,52 +55,36 @@ end
 -- errmsg: 失败是,返回失败描述信息
 -- #########################################################################################################
 function business:do_action(tbl)
+    -- 解析记录并组装SQL Values
+    local values = ""
+    local list = tbl.list
+    local count = #list
 
-    -- 检查ID是否存在
-    local product_check = require "product_check"
-    local result,errmsg = product_check:name_is_exists(tbl.product_code)
-    if false == result then
-        return false, "数据库中CODE:".. tbl.product_code .. "不存在"
+    for i = 1, count do
+        if 0 < string.len(values) then
+          values = values .. " or "
+        end
+
+        values = values .. business:encode_record_value(list[i].product_code, list[i].supplier_code)
     end
-
-    -- 检查ID是否存在
-    local supplier_check = require "supplier_check"
-    local result,errmsg = supplier_check:name_is_exists(tbl.supplier_code)
-    if false == result then
-        return false, "数据库中CODE:".. tbl.supplier_code .. "不存在"
-    end    
-
-    -- 添加时间戳
-    business:add_timestamp(tbl)
-
-    local columns = "(product_code, supplier_code, quality_criterion, packaging, gmp_cn, gmp_eu," ..
-                    "FDA, CEP, US_DMF, EU_DMF, TGA, MF,KOSHER, HALAL, others, capacity," ..
-                    "update_time,create_time)"
-
-    local value = "(" ..
-                   "'" .. tbl.product_code .. "','" .. tbl.supplier_code .. "','" .. tbl.quality_criterion .. "'," .. 
-                   "'" .. tbl.packaging .. "','" .. tbl.gmp_cn .. "','" .. tbl.gmp_eu .. "'," .. 
-                   "'" .. tbl.FDA .. "','" .. tbl.CEP .. "','" .. tbl.US_DMF .. "'," .. 
-                   "'" .. tbl.EU_DMF .. "','" .. tbl.TGA .. "','" .. tbl.MF .. "'," ..
-                   "'" .. tbl.KOSHER .. "','" .. tbl.HALAL .. "','" .. tbl.others .. "','" .. tbl.capacity .. "'," ..
-                   tbl.update_time .. "," .. tbl.create_time ..
-                  ")"
-    local sql = "insert into t_product_supplier_ref " .. columns .. " value " .. value .. 
-                " ON DUPLICATE KEY UPDATE product_code='" .. tbl.product_code .. "',supplier_code='" ..  tbl.supplier_code .. "'"
+     
+    local sql = "delete from t_product_supplier_ref where " .. values
 
     -- 添加记录到数据库
     local dao = require "mysql_db"
     local configure = require "configure"
     local mysql = configure.mysql
 
-    ngx.log(ngx.DEBUG, "insert product_supplier_ref sql:" .. sql)
+    ngx.log(ngx.DEBUG, "delete product sql:" .. sql)
     local result,info = dao:execute(mysql.HOST, mysql.PORT, mysql.DATABASE, mysql.USER, mysql.PASSWORD, sql)
     if not result then
-        ngx.log(ngx.ERR, "insert sql:" .. sql .. " failed")
+        ngx.log(ngx.ERR, "delete sql:" .. sql .. " failed")
         return false
     end
 
     return true
+
 end
+
 
 return business

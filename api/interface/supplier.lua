@@ -418,6 +418,13 @@ if OP == "add" then
         response.code = ERR.USERINPUTFORMAT
         response.msg = errmsg
     end
+elseif OP == "batch_add" then
+    local business = require "supplier_batch_add"
+    local result,errmsg = business:do_action(tbl)
+    if false == result then
+        response.code = ERR.USERINPUTLOGICAL
+        response.msg = errmsg
+    end     
 elseif OP == "update" then
     local result,errmsg = check_update_params(tbl)
     if true == result then

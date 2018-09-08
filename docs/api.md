@@ -27,6 +27,7 @@
 ### [7.4 产品和供应商批量删除](#relation_batch_delete)
 ### [7.5 关联产品供应商列表](#relation_list)
 ### [7.6 产品相似供应商列表](#similarity_list)
+### [7.7 产品供应商审核](#product_supplier_approve)
 ## [8 用户管理](#user_manage)
 ### [8.1 用户登录](#user_signin)
 ### [8.2 我的供应商](#my_suppliers)
@@ -921,21 +922,22 @@
 
 | 名称  | 类型 | 必填 | 描述 |
 | :--------| ----:| ----:| :--- |
-| product_id | string | 是 | 产品ID |
-| product_code | string | 是 | 产品代码 |
-| product_name_cn | string | 是 | 产品中文名称 |
-| product_name_en | string | 是 | 产品英文名称 |
-| product_cas | string | 是 | 产品CAS号 |
-| purpose | string | 是 | 用途 |
-| supplier_id |  string  | 是 | 供应商ID |
-| supplier_code | string | 是 | 供应商代码 |
-| contact_name | string | 是 | 联系人 |
-| telephone | string | 是 | 座机 |
-| mobile_number | string | 是 | 手机 |
-| email | string | 是 | 邮箱 |
-| manufacturer | string | 是 | 生产商 |
-| manufacturer_belongs_area | string | 是 | 生产商所属地区 |
-| manufacturer_address | string | 是 | 生产商单位地址 |
+| product_id | string | 否 | 产品ID |
+| product_code | string | 否 | 产品代码 |
+| product_name_cn | string | 否 | 产品中文名称 |
+| product_name_en | string | 否 | 产品英文名称 |
+| product_cas | string | 否 | 产品CAS号 |
+| purpose | string | 否 | 用途 |
+| supplier_id |  string  | 否 | 供应商ID |
+| supplier_code | string | 否 | 供应商代码 |
+| contact_name | string | 否 | 联系人 |
+| telephone | string | 否 | 座机 |
+| mobile_number | string | 否 | 手机 |
+| email | string | 否 | 邮箱 |
+| manufacturer | string | 否 | 生产商 |
+| manufacturer_belongs_area | string | 否 | 生产商所属地区 |
+| manufacturer_address | string | 否 | 生产商单位地址 |
+| status |  int | 是 | 状态 0 审核未通过，1 审核通过 |
 
 
 * 应答字段
@@ -1015,7 +1017,8 @@
 	"email": "111111@111.com",
 	"manufacturer": "上海朝晖药业有限公司",
 	"manufacturer_belongs_area": "中国上海",
-	"manufacturer_address": "上海市宝山区抚远路2151号" 	   
+	"manufacturer_address": "上海市宝山区抚远路2151号",
+	"status": 0  
 }
 ```
 
@@ -1141,6 +1144,7 @@
 | HALAL | int | 是 | HALAL |
 | others | string | 否 | 其他资质 |
 | capacity | int | 是 | 年产能,单位吨 |
+| status | int | 是 | 审核状态 |
 | update_time | int | 是 | 更新时间 |
 | create_time | int | 是 | 创建时间 |
 
@@ -1202,12 +1206,58 @@
 					"KOSHER": 0,
 					"HALAL": 0,
 					"others": ["http://www.system.com/picture/1.jpg","http://www.system.com/picture/2.jpg"],
+					"status" : 0,
 					"capacity": 200000	               
 	        "update_time": 1533112230,
 	        "create_time": 1533112230
 	    }  
 	  ]
 	}	
+}
+```
+
+### 7.7 产品供应商审核 <a name="product_supplier_approve"/>
+
+* 请求URL:http://${DOMAIN}/interface/relation/approve
+* 请求字段:
+
+| 名称  | 类型 | 必填 | 描述 |
+| :--------| ----:| ----:| :--- |
+| list |  object array | 是 | 关系组 |
+| status |  int | 是 | 状态 0 审核未通过，1 审核通过 |
+
+* list item 字段
+
+| 名称  | 类型 | 必填 | 描述 |
+| :--------| ----:| ----:| :--- |
+| product_code |  string  | 是 | 产品ID |
+| supplier_code |  string  | 否 | 供应商ID |
+
+* 应答字段
+
+| 名称  | 类型 | 必填 | 描述 |
+| :--------| ----:| ----:| :--- |
+| code |  int  | 是 | 状态码 |
+| msg |  string  | 否 | 失败时的提示信息 |
+
+* 请求示例
+```
+{
+    "list": [
+        {
+            "product_code": "P1f18348f32c9a4694f16426798937ae2",
+            "supplier_code": "S1f18348f32c9a4694f16426798937ae2"
+        }
+    ],
+    "status": 1
+}
+```
+
+* 应答示例
+```
+{
+	"msg": "",
+	"code": 0
 }
 ```
 
@@ -1245,7 +1295,7 @@
 }
 ```
 ### 8.2 我的供应商 <a name="my_suppliers"/>
-* 请求URL:http://${DOMAIN}/interface/user/my_supplier
+* 请求URL:http://${DOMAIN}/interface/user/my_supplier?code=1111121212121212121
 * 请求字段: 无
 
 * 应答字段

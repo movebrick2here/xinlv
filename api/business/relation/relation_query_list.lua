@@ -22,6 +22,7 @@
 --   `HALAL` tinyint NOT NULL DEFAULT 0 COMMENT 'HALAL',
 --   `others` varchar(2048) NOT NULL DEFAULT 0 COMMENT '其他资质',
 --   `capacity` int NOT NULL DEFAULT 0 COMMENT '该产品年产能',
+--   `status` tinyint      NOT NULL DEFAULT 1 COMMENT '审核状态 0 未审核， 1 已审核',
 --   `update_time` bigint NOT NULL DEFAULT 0 COMMENT '更新时间',
 --   `create_time` bigint NOT NULL DEFAULT 0 COMMENT '创建时间',
 --   PRIMARY KEY (`product_supplier_ref_id`,`supplier_id`)
@@ -220,7 +221,16 @@ function business:encode_sql_where(tbl)
         end
 
         where = where .. "manufacturer_address like '%" .. tbl.manufacturer_address .. "%'"
-    end       
+    end
+
+    if nil ~= tbl.status then
+        if 0 < string.len(where) then
+            where = where .. " and "
+        end
+
+        where = where .. "status = " .. tostring(tbl.status)
+    end
+
     return where    
 end
 

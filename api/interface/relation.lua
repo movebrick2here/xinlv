@@ -188,6 +188,79 @@ function check_add_params(tbl)
 end
 
 -- #########################################################################################################
+-- 函数名: check_batch_delete_params
+-- 函数功能: 校验接口 batch add 的参数
+-- 参数定义:
+-- tbl: POST请求过来的JSON数据,已经用cjson库转换成LUA TABLE
+-- 返回值:
+-- result: bool 表示函数成功或者失败
+-- errmsg: string 表示函数失败的原因,函数校验成功时无需返回该值
+-- #########################################################################################################
+function check_batch_delete_params(tbl)
+    if nil == tbl then
+        return false, "POST数据格式错误"
+    end
+
+    if (nil ~= tbl["list"]) and
+            ("table" ~= type(tbl["list"])) then
+        return false, "请检查参数list.必须为数组"
+    end
+
+    local list = tbl.list
+
+    for i = 1, #list do
+        if (nil ~= list[i]["product_code"]) and
+                ("string" ~= type(list[i]["product_code"])) then
+            return false, "请检查参数product_code.必须为字符型"
+        end
+
+        if (nil ~= list[i]["supplier_code"]) and
+                ("string" ~= type(list[i]["supplier_code"])) then
+            return false, "请检查参数supplier_code.必须为字符型"
+        end 
+    end   
+end
+
+-- #########################################################################################################
+-- 函数名: check_approve_params
+-- 函数功能: 校验接口 approve 的参数
+-- 参数定义:
+-- tbl: POST请求过来的JSON数据,已经用cjson库转换成LUA TABLE
+-- 返回值:
+-- result: bool 表示函数成功或者失败
+-- errmsg: string 表示函数失败的原因,函数校验成功时无需返回该值
+-- #########################################################################################################
+function check_approve_params(tbl)
+    if nil == tbl then
+        return false, "POST数据格式错误"
+    end
+
+    if (nil ~= tbl["list"]) and
+            ("table" ~= type(tbl["list"])) then
+        return false, "请检查参数list.必须为数组"
+    end
+
+    if (nil ~= tbl["status"]) and
+            ("number" ~= type(tbl["status"])) then
+        return false, "请检查参数status.必须为整数"
+    end    
+
+    local list = tbl.list
+
+    for i = 1, #list do
+        if (nil ~= list[i]["product_code"]) and
+                ("string" ~= type(list[i]["product_code"])) then
+            return false, "请检查参数product_code.必须为字符型"
+        end
+
+        if (nil ~= list[i]["supplier_code"]) and
+                ("string" ~= type(list[i]["supplier_code"])) then
+            return false, "请检查参数supplier_code.必须为字符型"
+        end 
+    end   
+end
+
+-- #########################################################################################################
 -- 函数名: check_delete_params
 -- 函数功能: 校验接口 delete 的参数
 -- 参数定义:
@@ -442,10 +515,43 @@ if OP == "add" then
         response.code = ERR.USERINPUTFORMAT
         response.msg = errmsg
     end
+elseif OP == "batch_add" then
+    local business = require "relation_batch_add"
+    local result,errmsg = business:do_action(tbl)
+    if false == result then
+        response.code = ERR.USERINPUTLOGICAL
+        response.msg = errmsg
+    end  
 elseif OP == "delete" then
     local result,errmsg = check_delete_params(tbl)
     if true == result then
         local business = require "relation_delete"
+        local result,errmsg = business:do_action(tbl)
+        if false == result then
+            response.code = ERR.USERINPUTLOGICAL
+            response.msg = errmsg
+        end
+    else
+        response.code = ERR.USERINPUTFORMAT
+        response.msg = errmsg
+    end
+elseif OP == "batch_delete" then
+    local result,errmsg = check_batch_delete_params(tbl)
+    if true == result then
+        local business = require "relation_batch_delete"
+        local result,errmsg = business:do_action(tbl)
+        if false == result then
+            response.code = ERR.USERINPUTLOGICAL
+            response.msg = errmsg
+        end
+    else
+        response.code = ERR.USERINPUTFORMAT
+        response.msg = errmsg
+    end
+elseif OP == "approve" then
+    local result,errmsg = check_approve_params(tbl)
+    if true == result then
+        local business = require "relation_approve"
         local result,errmsg = business:do_action(tbl)
         if false == result then
             response.code = ERR.USERINPUTLOGICAL

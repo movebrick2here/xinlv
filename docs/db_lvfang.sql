@@ -89,6 +89,7 @@ CREATE TABLE `t_product_supplier_ref` (
   `HALAL` tinyint NOT NULL DEFAULT 0 COMMENT 'HALAL',
   `others` varchar(2048) NOT NULL DEFAULT 0 COMMENT '其他资质',
   `capacity` int NOT NULL DEFAULT 0 COMMENT '该产品年产能',
+  `status` tinyint      NOT NULL DEFAULT 1 COMMENT '审核状态 0 未审核， 1 已审核',
   `update_time` bigint NOT NULL DEFAULT 0 COMMENT '更新时间',
   `create_time` bigint NOT NULL DEFAULT 0 COMMENT '创建时间',
   PRIMARY KEY (`product_code`,`supplier_code`)
@@ -110,7 +111,7 @@ CREATE VIEW `v_product_supplier` AS SELECT  a.product_id as product_id, a.produc
                                     b.manufacturer_iso as manufacturer_iso, b.haccp as haccp, b.fsms as fsms,
                                     c.quality_criterion as quality_criterion, c.packaging as packaging,
                                     c.gmp_cn as gmp_cn, c.gmp_eu as gmp_eu, c.FDA as FDA, c.CEP as CEP, c.US_DMF as US_DMF,
-                                    c.EU_DMF as EU_DMF, c.TGA as TGA, c.MF as MF, c.KOSHER as KOSHER, c.HALAL as HALAL,
+                                    c.EU_DMF as EU_DMF, c.TGA as TGA, c.MF as MF, c.KOSHER as KOSHER, c.HALAL as HALAL, c.status,
                                     c.others as others, c.capacity as capacity, c.update_time as update_time, c.create_time as create_time
                           FROM t_product_supplier_ref c, t_product a, t_supplier b
                           WHERE c.product_code = a.product_code

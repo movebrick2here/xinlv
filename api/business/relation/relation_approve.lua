@@ -42,7 +42,7 @@ local business = {}
 function business:encode_record_value(product_code, supplier_code)
     local value = "(product_code='" .. product_code .. "' and supplier_code = '" .. supplier_code .. "')"
 
-    return true
+    return value
 end
 
 -- #########################################################################################################
@@ -58,7 +58,11 @@ function business:do_action(tbl)
     -- 解析记录并组装SQL Values
     local values = ""
     local list = tbl.list
-    local count = #list
+
+    ngx.log(ngx.DEBUG, "relation approve ......... ")
+
+    local util = require "util"
+    local count = util:table_length(list)    
 
     for i = 1, count do
         if 0 < string.len(values) then
@@ -67,7 +71,7 @@ function business:do_action(tbl)
 
         values = values .. business:encode_record_value(list[i].product_code, list[i].supplier_code)
     end
-    
+
     local sql = "update t_product_supplier_ref set status =" .. tostring(tbl.status) .. " where " .. values
 
     -- 添加记录到数据库

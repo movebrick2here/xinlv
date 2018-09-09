@@ -235,19 +235,21 @@ function check_approve_params(tbl)
         return false, "POST数据格式错误"
     end
 
-    if (nil ~= tbl["list"]) and
+    if (nil == tbl["list"]) or
             ("table" ~= type(tbl["list"])) then
         return false, "请检查参数list.必须为数组"
     end
 
-    if (nil ~= tbl["status"]) and
+    if (nil == tbl["status"]) or
             ("number" ~= type(tbl["status"])) then
         return false, "请检查参数status.必须为整数"
-    end    
+    end
 
     local list = tbl.list
+    local util = require "util"
+    local count = util:table_length(list)
 
-    for i = 1, #list do
+    for i = 1, count do
         if (nil ~= list[i]["product_code"]) and
                 ("string" ~= type(list[i]["product_code"])) then
             return false, "请检查参数product_code.必须为字符型"
@@ -257,7 +259,9 @@ function check_approve_params(tbl)
                 ("string" ~= type(list[i]["supplier_code"])) then
             return false, "请检查参数supplier_code.必须为字符型"
         end 
-    end   
+    end
+
+    return true 
 end
 
 -- #########################################################################################################

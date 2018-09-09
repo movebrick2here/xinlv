@@ -58,7 +58,9 @@ function business:do_action(tbl)
     -- 解析记录并组装SQL Values
     local values = ""
     local list = tbl.list
-    local count = #list
+
+    local util = require "util"
+    local count = util:table_length(list)    
 
     for i = 1, count do
         if 0 < string.len(values) then

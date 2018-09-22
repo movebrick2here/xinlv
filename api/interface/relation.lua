@@ -58,11 +58,11 @@ function check_pages_params(tbl)
     end
 
     if nil == tbl.page_size then
-        page_size = 10
+        tbl.page_size = 10
     end
 
     if nil == tbl.page_number then
-        page_number = 1
+        tbl.page_number = 1
     end
 
     return true
@@ -94,6 +94,47 @@ function check_query_time_params(tbl)
 
     return true
 end
+
+-- #########################################################################################################
+-- 函数名: check_query_similarity_list_params
+-- 函数功能: 检查时间参数
+-- 参数定义:
+-- tbl: POST请求过来的JSON数据,已经用cjson库转换成LUA TABLE
+-- 返回值:
+-- result: bool 表示函数成功或者失败
+-- errmsg: string 表示函数失败的原因,函数校验成功时无需返回该值
+-- #########################################################################################################
+function check_query_similarity_list_params(tbl)
+    if nil == tbl then
+        return false, "POST数据格式错误"
+    end
+
+    if (nil ~= tbl["page_size"]) and
+            ("number" ~= type(tbl["page_size"])) then
+        return false, "请检查参数page_size.必须为整型"
+    end
+
+    if (nil ~= tbl["page_number"]) and
+            ("number" ~= type(tbl["page_number"])) then
+        return false, "请检查参数page_number.必须为整型"
+    end
+
+    if nil == tbl.page_size then
+        tbl.page_size = 10
+    end
+
+    if nil == tbl.page_number then
+        tbl.page_number = 1
+    end    
+
+    if (nil == tbl["supplier_code1"]) or
+            ("string" ~= type(tbl["supplier_code1"])) then
+        return false, "请检查参数supplier_code1.为必填且必须为字符型"
+    end
+
+    return true
+end
+
 
 -- #########################################################################################################
 -- 函数名: check_add_params
@@ -580,6 +621,21 @@ elseif OP == "list" then
         response.code = ERR.USERINPUTFORMAT
         response.msg = errmsg
     end
+elseif OP == "similarity_supplier_list" then
+    local result,errmsg = check_query_similarity_list_params(tbl)
+    if true == result then
+        local business = require "similarity_supplier_list"
+        local result,info = business:do_action(tbl)
+        if false == result then
+            response.code = ERR.USERINPUTLOGICAL
+            response.msg = info
+        else
+            response.data = info
+        end
+    else
+        response.code = ERR.USERINPUTFORMAT
+        response.msg = errmsg
+    end    
 else
     response.code = ERR.USERINPUTFORMAT
     response.msg = "无效的请求命令:" .. OP

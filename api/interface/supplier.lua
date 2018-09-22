@@ -58,11 +58,11 @@ function check_pages_params(tbl)
     end
 
     if nil == tbl.page_size then
-        page_size = 10
+        tbl.page_size = 10
     end
 
     if nil == tbl.page_number then
-        page_number = 1
+        tbl.page_number = 1
     end
     
     return true

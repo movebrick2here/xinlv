@@ -1082,14 +1082,14 @@
 }
 ```
 
-### 7.6 产品相似供应商列表 <a name="similarity_list"/>
+### 7.6 产品相似供应商列表 <a name="similarity_supplier_list"/>
 
-* 请求URL:http://${DOMAIN}/interface/relation/list
+* 请求URL:http://${DOMAIN}/interface/relation/similarity_supplier_list
 * 请求字段:
 
 | 名称  | 类型 | 必填 | 描述 |
 | :--------| ----:| ----:| :--- |
-| product_codes | string array | 是 | 产品代码 |
+| supplier_code | string  | 是 | 供应商代码 |
 
 * 应答字段
 
@@ -1103,18 +1103,6 @@
 
 | 名称  | 类型 | 必填 | 描述 |
 | :--------| ----:| ----:| :--- |
-| product_id | string | 是 | 产品ID |
-| product_code | string | 是 | 产品代码 |
-| product_name_cn | string | 是 | 产品中文名称 |
-| product_name_en | string | 是 | 产品英文名称 |
-| product_cas | string | 是 | 产品CAS号 |
-| molecular_formula | string | 是 | 产品分子式 |
-| molecular_weight | string | 是 | 产品分子量 |
-| constitutional_formula | string | 是 | 产品结构式 |
-| HS_Code | string | 是 | 海关编码 |
-| category | string | 是 | 所属类别 |
-| physicochemical_property | string | 是 | 理化性质 |
-| purpose | string | 是 | 用途 |
 | supplier_id |  string  | 是 | 供应商ID |
 | supplier_code | string | 是 | 供应商代码 |
 | contact_name | string | 是 | 联系人 |
@@ -1127,31 +1115,15 @@
 | manufacturer_address | string | 是 | 生产商单位地址 |
 | manufacturer_description | string | 是 | 生产单位简介 |
 | manufacturer_site | string | 是 | 生产单位官网 |
-| manufacturer_iso | bool | 是 | ISO标准 |
-| haccp | bool | 是 | HACCP |
-| fsms | bool | 是 | FSMS |
-| quality_criterion | string | 是 | 质量标准 |
-| packaging | string | 是 | 包装 |
-| gmp_cn | int | 是 | 中国GMP |
-| gmp_eu | int | 是 | 欧洲GMP |
-| FDA | int | 是 | FDA |
-| CEP | int | 是 | CEP |
-| US_DMF | int | 是 | US_DMF |
-| EU_DMF | int | 是 | EU_DMF |
-| TGA | int | 是 | TGA |
-| MF | int | 是 | MF |
-| KOSHER | int | 是 | KOSHER |
-| HALAL | int | 是 | HALAL |
-| others | string | 否 | 其他资质 |
-| capacity | int | 是 | 年产能,单位吨 |
-| status | int | 是 | 审核状态 |
+| product_count | int | 是 | 相同产品数量 |
+| product_list |  json object array  | 是 | 产品列表 |
 | update_time | int | 是 | 更新时间 |
 | create_time | int | 是 | 创建时间 |
 
 * 请求示例
 ```
 {
-	"product_codes": ["P1"]   
+	"supplier_code": "S1"
 }
 ```
 
@@ -1166,19 +1138,7 @@
 	  "total_number": 30,
 	  "list": [
 	    {
-            "product_id": "P1f18348f32c9a4694f16426798937ae2",
-	        "product_code": "P1",
-	        "product_name_cn": "马来酸氨氯地平",
-	        "product_name_en": "Amlodipine Maleate",
-	        "product_cas": "88150-47-4",
-	        "molecular_formula": "C24H29ClN2O9",
-	        "molecular_weight": "524.9481",
-	        "constitutional_formula": "http://store.system.com/img/cf.png",
-	        "HS_Code": "2942000000",
-	        "category": "原料药",
-	        "physicochemical_property": "类白色或淡黄色结晶粉",
-	        "purpose": "抗高血压"	,
-            "supplier_id": "S1f18348f32c9a4694f16426798937ae2",
+          "supplier_id": "S1f18348f32c9a4694f16426798937ae2",
 	        "supplier_code": "S1",
 	        "contact_name": "张经理",
 	        "position": "销售经理",
@@ -1190,31 +1150,28 @@
 	        "manufacturer_address": "上海市宝山区抚远路2151号",
 	        "manufacturer_description": "上海朝晖是一家...年产能...",
 	        "manufacturer_site": "http://www.zhpharma.cn/",
-	        "manufacturer_iso": true,
-	        "haccp": false,
-	        "fsms": false,	 
-					"quality_criterion": "CP2010",
-					"packaging": "25公斤桶",
-					"gmp_cn": 1,
-					"gmp_eu": 0,
-					"FDA": 0,
-					"CEP": 0,
-					"US_DMF": 0,
-					"EU_DMF": 0,
-					"TGA": 0,
-					"MF": 0,
-					"KOSHER": 0,
-					"HALAL": 0,
-					"others": ["http://www.system.com/picture/1.jpg","http://www.system.com/picture/2.jpg"],
-					"status" : 0,
-					"capacity": 200000	               
+	        "product_count": 1,
+	        "product_list":[
+							{
+							    "product_id": "P1f18348f32c9a4694f16426798937ae2",
+								"product_code": "P1",
+								"product_name_cn": "马来酸氨氯地平",
+								"product_name_en": "Amlodipine Maleate",
+								"product_cas": "88150-47-4",
+								"molecular_formula": "C24H29ClN2O9",
+								"molecular_weight": "524.9481",
+								"HS_Code": "2942000000",
+								"category": "原料药",
+								"purpose": "抗高血压"    
+							}	        
+	        ],     
 	        "update_time": 1533112230,
 	        "create_time": 1533112230
 	    }  
 	  ]
 	}	
 }
-```
+```   
 
 ### 7.7 产品供应商审核 <a name="product_supplier_approve"/>
 
@@ -1252,6 +1209,8 @@
     "status": 1
 }
 ```
+
+
 
 * 应答示例
 ```

@@ -127,9 +127,9 @@ function check_query_similarity_list_params(tbl)
         tbl.page_number = 1
     end    
 
-    if (nil == tbl["supplier_code1"]) or
-            ("string" ~= type(tbl["supplier_code1"])) then
-        return false, "请检查参数supplier_code1.为必填且必须为字符型"
+    if (nil == tbl["supplier_code"]) or
+            ("string" ~= type(tbl["supplier_code"])) then
+        return false, "请检查参数supplier_code.为必填且必须为字符型"
     end
 
     return true

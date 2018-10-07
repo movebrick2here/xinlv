@@ -41,6 +41,10 @@ function business:results_string_to_number(info)
         if ( nil ~= info[i].product_count) then
             info[i]["product_count"] = tonumber(info[i].product_count)
         end
+        if ( nil ~= info[i].supplier_code1) then
+            info[i]["supplier_code"] = info[i].supplier_code1
+            info[i].supplier_code1 = nil
+        end        
 
         local cjson = require "cjson"
 
@@ -104,12 +108,12 @@ end
 function business:encode_sql_where(tbl)
     local where = ""
 
-    if nil ~= tbl.supplier_code1 then
+    if nil ~= tbl.supplier_code then
         if 0 < string.len(where) then
             where = where .. " and "
         end
 
-        where = where .. "supplier_code1 = '" .. tbl.supplier_code1 .. "'"
+        where = where .. "supplier_code1 = '" .. tbl.supplier_code .. "'"
     end
 
     return where    

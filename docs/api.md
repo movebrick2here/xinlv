@@ -33,6 +33,7 @@
 ### [8.2 我的供应商](#my_suppliers)
 ### [8.3 保存供应商](#save_suppliers)
 ### [8.4 用户登录状态](#user_sign_status)
+### [8.5 用户退出](#user_signout)
 ## [9 状态码](#status_code)
 -------------------
 ## 1. 关于文档 <a name="about_doc"/>
@@ -1358,6 +1359,32 @@
 ### 8.4 用户登录状态 <a name="user_sign_status"/>
 
 * 请求URL:http://${DOMAIN}/interface/user/sign_status
+* 请求字段:无
+
+* 应答字段
+
+| 名称  | 类型 | 必填 | 描述 |
+| :--------| ----:| ----:| :--- |
+| code |  int  | 是 | 状态码 |
+| msg |  string  | 否 | 失败时的提示信息 |
+
+* 请求示例
+```
+{
+}
+```
+
+* 应答示例
+```
+{
+	"msg": "",
+	"code": 0
+}
+```
+
+### 8.5 用户登录状态 <a name="user_sign_out"/>
+
+* 请求URL:http://${DOMAIN}/interface/user/signout
 * 请求字段:无
 
 * 应答字段

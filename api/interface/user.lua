@@ -462,7 +462,14 @@ elseif OP == "sign_status" then
     if false == result then
         response.code = ERR.USERINPUTLOGICAL
         response.msg = user_id
-    end  
+    end
+elseif OP == "signout" then
+    local business = require "user_is_signin"
+    local result, user_id = business:do_exit()
+    if false == result then
+        response.code = ERR.USERINPUTLOGICAL
+        response.msg = user_id
+    end
 elseif OP == "my_supplier" then
     local query = require "query_open_id"
     local open_id = query:do_action()

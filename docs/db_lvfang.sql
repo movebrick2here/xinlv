@@ -166,5 +166,6 @@ DELIMITER ;
 # insert into t_supplier value('96e79218965eb72c92a549dd5a330112', 'S1', '张经理', '销售经理', '021-11111111', '13811111111', '111111@111.com', '上海朝晖药业有限公司', '中国上海', '上海市宝山区抚远路2151号', '上海朝晖是一家。。。年产能。。。', 'http://www.zhpharma.cn/', '1', '0', '0', 1533982299, 1533982299);
 # insert into t_user value('96e79218965eb72c92a549dd5a330112', '0cf81978bc74df7a82c544a7df68f822', 'admin', 'admin', '13800000000', 1533982299,1533982299);
 # insert into t_similarity_supplier value('1', 'S2', '', 1, 1535383019, 1535383019);
+# insert into t_product_supplier_ref value('P1', '1', 'CP2010', '25公斤桶', 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 20000, 1535385885, 1535385885, 0);
 
 

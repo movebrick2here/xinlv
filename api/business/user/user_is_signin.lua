@@ -179,7 +179,7 @@ function business:do_exit()
 
     -- 查询记录
     local sql = "update t_session set access_token='1' where access_token='" 
-                .. access_token .. ";"
+                .. access_token .. "';"
 
     local dao = require "mysql_db"
     local configure = require "configure"

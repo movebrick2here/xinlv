@@ -79,22 +79,22 @@ function business:do_action(tbl)
     local util = require "util"
     local line_array = util:Split(tbl, "\r")
 
-    local product_codes = ""
+    local product_name_cns = ""
     for i = 1, #line_array do
         local line = string.gsub(line_array[i], "^%s*(.-)%s*$", "%1")
         ngx.log(ngx.DEBUG, " ##### line:" .. line)
         local ret_web, _ = string.find(line, "------WebKitFormBoundary")
         local ret_content, _ = string.find(line, "Content")
         if nil == ret_web and nil == ret_dis then
-            local result, value, product_code = business:encode_record_value(line)
+            local result, value, product_name_cn = business:encode_record_value(line)
             if false == result then
               return false, value
             end
 
-            if 0 < string.len(product_codes) then
-              product_codes = product_codes .. ","
+            if 0 < string.len(product_name_cns) then
+              product_name_cns = product_name_cns .. ","
             end
-            product_codes = product_codes .. product_code
+            product_name_cns = product_name_cns .. product_name_cn
 
             if 0 < string.len(values) then
               values = values .. ","
@@ -105,13 +105,13 @@ function business:do_action(tbl)
 
     -- 检查名称是否重复
     local check = require "product_check"
-    local result,errmsg = check:names_is_exists(product_codes)
+    local result,errmsg = check:names_is_exists(product_name_cns)
     if true == result then
         local cjson = require "cjson"
         return false, "数据库中已有CODE:".. cjson.encode(errmsg) .. "的记录"
     end
 
-    local columns = "(product_id, product_code, product_name_cn, product_name_en, product_cas, molecular_formula," ..
+    local columns = "(product_id, product_name_cn, product_name_en, product_cas, molecular_formula," ..
                     "molecular_weight, constitutional_formula, HS_Code, category, physicochemical_property, purpose," ..
                     "update_time,create_time)"
 

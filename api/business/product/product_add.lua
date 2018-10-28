@@ -59,19 +59,19 @@ function business:do_action(tbl)
 
     -- 检查名称是否重复
     local check = require "product_check"
-    local result,errmsg = check:name_is_exists(tbl.product_code)
+    local result,errmsg = check:name_is_exists(tbl.product_name_cn)
     if true == result then
-        return false, "数据库中已有CODE:".. tbl.product_code .. "的记录"
+        return false, "数据库中已有Name:".. tbl.product_name_cn .. "的记录"
     end
 
     -- 添加时间戳
     business:add_timestamp(tbl)
 
-    local columns = "(product_id, product_code, product_name_cn, product_name_en, product_cas, molecular_formula," ..
+    local columns = "(product_id, product_name_cn, product_name_en, product_cas, molecular_formula," ..
                     "molecular_weight, constitutional_formula, HS_Code, category, physicochemical_property, purpose," ..
                     "update_time,create_time)"
     local value = "(" ..
-                   "'" .. tbl.product_id .. "','" .. tbl.product_code .. "','" .. tbl.product_name_cn .. "'," .. 
+                   "'" .. tbl.product_id .. "','" .. tbl.product_name_cn .. "'," .. 
                    "'" .. tbl.product_name_en .. "','" .. tbl.product_cas .. "','" .. tbl.molecular_formula .. "'," .. 
                    "'" .. tbl.molecular_weight .. "','" .. tbl.constitutional_formula .. "','" .. tbl.HS_Code .. "'," .. 
                    "'" .. tbl.category .. "','" .. tbl.physicochemical_property .. "','" .. tbl.purpose .. "'," ..

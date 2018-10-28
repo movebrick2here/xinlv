@@ -74,7 +74,6 @@
 
 | 名称  | 类型 | 必填 | 描述 |
 | :--------| ----:| ----:| :--- |
-| product_code | string | 是 | 产品代码 |
 | product_name_cn | string | 是 | 产品中文名称 |
 | product_name_en | string | 是 | 产品英文名称 |
 | product_cas | string | 是 | 产品CAS号 |
@@ -104,7 +103,6 @@
 * 请求示例
 ```
 {
-	"product_code": "P1",
 	"product_name_cn": "马来酸氨氯地平",
 	"product_name_en": "Amlodipine Maleate",
 	"product_cas": "88150-47-4",
@@ -135,7 +133,6 @@
 | 名称  | 类型 | 必填 | 描述 |
 | :--------| ----:| ----:| :--- |
 | product_id | string | 是 | 产品ID |
-| product_code | string | 否 | 产品代码 |
 | product_name_cn | string | 否 | 产品中文名称 |
 | product_name_en | string | 否 | 产品英文名称 |
 | product_cas | string | 否 | 产品CAS号 |
@@ -159,7 +156,6 @@
 ```
 {
     "product_id": "P1f18348f32c9a4694f16426798937ae2",
-	"product_code": "P1",
 	"product_name_cn": "马来酸氨氯地平",
 	"product_name_en": "Amlodipine Maleate",
 	"product_cas": "88150-47-4",
@@ -393,7 +389,6 @@
 
 | 名称  | 类型 | 必填 | 描述 |
 | :--------| ----:| ----:| :--- |
-| supplier_code | string | 是 | 供应商代码 |
 | contact_name | string | 是 | 联系人 |
 | position | string | 是 | 职位 |
 | telephone | string | 是 | 座机 |
@@ -426,7 +421,6 @@
 * 请求示例
 ```
 {
-	"supplier_code": "S1",
 	"contact_name": "张经理",
 	"position": "销售经理",
 	"telephone": "021-11111111",
@@ -462,7 +456,6 @@
 | 名称  | 类型 | 必填 | 描述 |
 | :--------| ----:| ----:| :--- |
 | supplier_id |  string  | 是 | 供应商ID |
-| supplier_code | string | 否 | 供应商代码 |
 | contact_name | string | 否 | 联系人 |
 | sales_manager | string | 否 | 销售经理 |
 | telephone | string | 否 | 座机 |
@@ -496,7 +489,6 @@
 ```
 {
     "supplier_id": "S1f18348f32c9a4694f16426798937ae2",
-	"supplier_code": "S1",
 	"contact_name": "张经理",
 	"position": "销售经理",
 	"telephone": "021-11111111",

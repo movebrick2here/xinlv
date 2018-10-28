@@ -59,14 +59,14 @@ function business:do_action(tbl)
 
     -- 检查ID是否存在
     local product_check = require "product_check"
-    local result,errmsg = product_check:name_is_exists(tbl.product_code)
+    local result,errmsg = product_check:code_is_exists(tbl.product_code)
     if false == result then
         return false, "数据库中CODE:".. tbl.product_code .. "不存在"
     end
 
     -- 检查ID是否存在
     local supplier_check = require "supplier_check"
-    local result,errmsg = supplier_check:name_is_exists(tbl.supplier_code)
+    local result,errmsg = supplier_check:code_is_exists(tbl.supplier_code)
     if false == result then
         return false, "数据库中CODE:".. tbl.supplier_code .. "不存在"
     end    

@@ -35,6 +35,37 @@ local business = {}
 -- result: bool true存在,false不存在
 -- #########################################################################################################
 function business:name_is_exists(code)
+    local sql = "select product_id from t_product where product_name_cn='" .. code .. "'"
+
+    local dao = require "mysql_db"
+    local configure = require "configure"
+    local mysql = configure.mysql
+    local cjson = require "cjson"
+
+    ngx.log(ngx.DEBUG, "check sql:" .. sql)
+    local result,info = dao:query(mysql.HOST, mysql.PORT, mysql.DATABASE, mysql.USER, mysql.PASSWORD, sql)
+    if false == result then
+        return false, info
+    end
+
+    local util = require "util"
+
+    if nil == info or true == util.is_empty_table(info) then
+        return false
+    end
+
+    return true
+end
+
+-- #########################################################################################################
+-- 函数名: code_is_exists
+-- 函数功能: 查询名称是否存在
+-- 参数定义:
+-- name: 名称
+-- 返回值:
+-- result: bool true存在,false不存在
+-- #########################################################################################################
+function business:code_is_exists(code)
     local sql = "select product_id from t_product where product_code='" .. code .. "'"
 
     local dao = require "mysql_db"
@@ -66,7 +97,7 @@ end
 -- result: bool true 对应,false不对应
 -- #########################################################################################################
 function business:id_name_is_consistent(id, code)
-    local sql = "select product_id from t_product where product_id='" .. id .. "' and product_code='" .. code .. "'"
+    local sql = "select product_id from t_product where product_id='" .. id .. "' and product_name_cn='" .. code .. "'"
 
     local dao = require "mysql_db"
     local configure = require "configure"
@@ -97,6 +128,37 @@ end
 -- result: bool true存在,false不存在
 -- #########################################################################################################
 function business:names_is_exists(codes)
+    local sql = "select product_code from t_product where product_name_cn in (" .. codes .. ")"
+
+    local dao = require "mysql_db"
+    local configure = require "configure"
+    local mysql = configure.mysql
+    local cjson = require "cjson"
+
+    ngx.log(ngx.DEBUG, "check sql:" .. sql)
+    local result,info = dao:query(mysql.HOST, mysql.PORT, mysql.DATABASE, mysql.USER, mysql.PASSWORD, sql)
+    if false == result then
+        return false, info
+    end
+
+    local util = require "util"
+
+    if nil == info or true == util.is_empty_table(info) then
+        return false
+    end
+
+    return true, info
+end
+
+-- #########################################################################################################
+-- 函数名: codes_is_exists
+-- 函数功能: 查询名称是否存在
+-- 参数定义:
+-- name: 名称
+-- 返回值:
+-- result: bool true存在,false不存在
+-- #########################################################################################################
+function business:codes_is_exists(codes)
     local sql = "select product_code from t_product where product_code in (" .. codes .. ")"
 
     local dao = require "mysql_db"

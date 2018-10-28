@@ -152,14 +152,14 @@ end
 -- errmsg: 失败是,返回失败描述信息
 -- #########################################################################################################
 function business:do_action(tbl)
-    if nil ~= tbl.product_code then
+    if nil ~= tbl.product_name_cn then
         -- 检查名称是否重复
         local check = require "product_check"
-        local result,errmsg = check:name_is_exists(tbl.product_code)
+        local result,errmsg = check:name_is_exists(tbl.product_name_cn)
         if true == result then
-            result,errmsg = check:id_name_is_consistent(tbl.product_id, tbl.product_code)
+            result,errmsg = check:id_name_is_consistent(tbl.product_id, tbl.product_name_cn)
             if false == result then
-                return false, "数据库中已有CODE:".. tbl.product_code .. "的记录"
+                return false, "数据库中已有CODE:".. tbl.product_name_cn .. "的记录"
             end
         end
     end

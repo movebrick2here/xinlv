@@ -111,7 +111,7 @@ function business:do_action(tbl)
 
     -- 检查名称是否重复
     local check = require "product_check"
-    local result,errmsg = check:names_is_exists(product_codes)
+    local result,errmsg = check:codes_is_exists(product_codes)
     if false == result or #errmsg ~= #line_array then
         local cjson = require "cjson"
         return false, "数据库中有产品CODE: " .. product_codes .. " db:" .. cjson.encode(errmsg) .. "不存在的记录"
@@ -119,7 +119,7 @@ function business:do_action(tbl)
 
     -- 检查名称是否重复
     local check = require "supplier_check"
-    local result,errmsg = check:names_is_exists(supplier_codes)
+    local result,errmsg = check:codes_is_exists(supplier_codes)
     if false == result or #errmsg ~= #line_array then
         local cjson = require "cjson"
         return false, "数据库中有供应商CODE: " .. supplier_codes .. " db:" .. cjson.encode(errmsg) .. "不存在的记录"

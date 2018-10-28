@@ -127,14 +127,14 @@ function business:do_action(tbl)
     end
 
     -- 检查名称是否重复
-    local check = require "supplier_check"
-    local result,errmsg = check:names_is_exists(supplier_codes)
-    if true == result then
-        local cjson = require "cjson"
-        return false, "数据库中已有CODE:".. cjson.encode(errmsg) .. "的记录"
-    end
+    -- local check = require "supplier_check"
+    -- local result,errmsg = check:names_is_exists(supplier_codes)
+    -- if true == result then
+    --     local cjson = require "cjson"
+    --    return false, "数据库中已有CODE:".. cjson.encode(errmsg) .. "的记录"
+    -- end
 
-    local columns = "(supplier_id, supplier_code, contact_name, position, telephone, mobile_number," ..
+    local columns = "(supplier_id, contact_name, position, telephone, mobile_number," ..
                     "email, manufacturer, manufacturer_belongs_area, manufacturer_address, manufacturer_description, manufacturer_site," ..
                     "manufacturer_iso,haccp,fsms," ..
                     "update_time,create_time)"

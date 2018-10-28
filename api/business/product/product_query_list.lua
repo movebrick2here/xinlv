@@ -116,7 +116,7 @@ function business:encode_sql_where(tbl)
             where = where .. " and "
         end
 
-        where = where .. "product_code like '%" .. tbl.product_code .. "%'"
+        where = where .. "product_code = '" .. tbl.product_code .. "'"
     end
 
     if nil ~= tbl.product_name_cn then

@@ -109,9 +109,9 @@ function check_add_params(tbl)
         return false, "POST数据格式错误"
     end
 
-    if (nil == tbl["supplier_code"]) or
-            ("string" ~= type(tbl["supplier_code"])) then
-        return false, "请检查参数supplier_code.为必填且必须为字符型"
+    if (nil == tbl["contact_name"]) or
+            ("string" ~= type(tbl["contact_name"])) then
+        return false, "请检查参数contact_name.为必填且必须为字符型"
     end  
 
     return true
@@ -136,9 +136,9 @@ function check_update_params(tbl)
         return false, "请检查参数supplier_id.为必填且必须为字符型"
     end
 
-    if (nil ~= tbl["supplier_code"]) and
-            ("string" ~= type(tbl["supplier_code"])) then
-        return false, "请检查参数supplier_code.必须为字符型"
+    if (nil ~= tbl["contact_name"]) and
+            ("string" ~= type(tbl["contact_name"])) then
+        return false, "请检查参数contact_name.必须为字符型"
     end
 
     return true

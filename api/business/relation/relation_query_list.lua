@@ -124,7 +124,7 @@ function business:encode_sql_where(tbl)
             where = where .. " and "
         end
 
-        where = where .. "product_code like '%" .. tbl.product_code .. "%'"
+        where = where .. "product_code = '" .. tbl.product_code .. "'"
     end
 
     if nil ~= tbl.product_name_cn then
@@ -164,7 +164,7 @@ function business:encode_sql_where(tbl)
             where = where .. " and "
         end
 
-        where = where .. "supplier_id like '%" .. tbl.supplier_id .. "%'"
+        where = where .. "supplier_id = '" .. tbl.supplier_id .. "'"
     end
 
     if nil ~= tbl.supplier_code then
@@ -172,7 +172,7 @@ function business:encode_sql_where(tbl)
             where = where .. " and "
         end
 
-        where = where .. "supplier_code like '%" .. tbl.supplier_code .. "%'"
+        where = where .. "supplier_code = '" .. tbl.supplier_code .. "'"
     end
 
     if nil ~= tbl.contact_name then

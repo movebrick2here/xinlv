@@ -35,7 +35,7 @@ CREATE TABLE `t_session` (
 
 CREATE TABLE `t_product` (
   `product_id`     varchar(128)      NOT NULL DEFAULT '' COMMENT '产品ID',
-  `product_code`   varchar(256)     NOT NULL DEFAULT '' COMMENT '产品代码',
+  `product_code`   int     NOT NULL AUTO_INCREMENT COMMENT '产品代码',
   `product_name_cn`   varchar(256)     NOT NULL DEFAULT '' COMMENT '产品中文名称',
   `product_name_en` varchar(256)     NOT NULL DEFAULT '' COMMENT '产品英文名称',
   `product_cas` varchar(128)      NOT NULL DEFAULT '' COMMENT '产品CAS号',
@@ -48,12 +48,12 @@ CREATE TABLE `t_product` (
   `purpose` varchar(128) NOT NULL DEFAULT '' COMMENT '用途',
   `update_time` bigint NOT NULL DEFAULT 0 COMMENT '更新时间',
   `create_time` bigint NOT NULL DEFAULT 0 COMMENT '创建时间',
-  PRIMARY KEY (`product_id`)
+  PRIMARY KEY (`product_code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 MAX_ROWS=200000 AVG_ROW_LENGTH=3000;
 
 CREATE TABLE `t_supplier` (
   `supplier_id`     varchar(128)      NOT NULL DEFAULT '' COMMENT '供应商ID',
-  `supplier_code`     varchar(128)      NOT NULL DEFAULT '' COMMENT '供应商CODE',
+  `supplier_code`     int      NOT NULL AUTO_INCREMENT COMMENT '供应商CODE',
   `contact_name`   varchar(256)     NOT NULL DEFAULT '' COMMENT '联系人',
   `position` varchar(256)     NOT NULL DEFAULT '' COMMENT '职位',
   `telephone` varchar(128)      NOT NULL DEFAULT '' COMMENT '座机',
@@ -69,7 +69,7 @@ CREATE TABLE `t_supplier` (
   `fsms` tinyint NOT NULL DEFAULT 0 COMMENT 'FSMS',
   `update_time` bigint NOT NULL DEFAULT 0 COMMENT '更新时间',
   `create_time` bigint NOT NULL DEFAULT 0 COMMENT '创建时间',
-  PRIMARY KEY (`supplier_id`)
+  PRIMARY KEY (`supplier_code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 MAX_ROWS=200000 AVG_ROW_LENGTH=3000;
 
 CREATE TABLE `t_product_supplier_ref` (

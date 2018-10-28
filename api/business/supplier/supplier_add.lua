@@ -61,21 +61,21 @@ end
 function business:do_action(tbl)
 
     -- 检查名称是否重复
-    local check = require "supplier_check"
-    local result,errmsg = check:name_is_exists(tbl.supplier_code)
-    if true == result then
-        return false, "数据库中已有Code:".. tbl.supplier_code .. "的记录"
-    end
+    -- local check = require "supplier_check"
+    -- local result,errmsg = check:name_is_exists(tbl.contact_name)
+    -- if true == result then
+    --    return false, "数据库中已有Code:".. tbl.contact_name .. "的记录"
+    -- end
 
     -- 添加时间戳
     business:add_timestamp(tbl)
 
-    local columns = "(supplier_id, supplier_code, contact_name, position, telephone, mobile_number," ..
+    local columns = "(supplier_id, contact_name, position, telephone, mobile_number," ..
                     "email, manufacturer, manufacturer_belongs_area, manufacturer_address, manufacturer_description, manufacturer_site," ..
                     "manufacturer_iso,haccp,fsms," ..
                     "update_time,create_time)"
     local value = "(" ..
-                   "'" .. tbl.supplier_id .. "','" .. tbl.supplier_code .. "','" .. tbl.contact_name .. "'," .. 
+                   "'" .. tbl.supplier_id .. "','" .. tbl.contact_name .. "'," .. 
                    "'" .. tbl.position .. "','" .. tbl.telephone .. "','" .. tbl.mobile_number .. "'," .. 
                    "'" .. tbl.email .. "','" .. tbl.manufacturer .. "','" .. tbl.manufacturer_belongs_area .. "'," .. 
                    "'" .. tbl.manufacturer_address .. "','" .. tbl.manufacturer_description .. "','" .. tbl.manufacturer_site .. "'," ..

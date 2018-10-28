@@ -54,13 +54,13 @@ end
 function business:encode_update_columns(tbl)
     local columns = ""
 
-    if nil ~= tbl.supplier_code then
-        if 0 < string.len(columns) then
-            columns = columns .. ","
-        end
+    -- if nil ~= tbl.supplier_code then
+    --    if 0 < string.len(columns) then
+    --        columns = columns .. ","
+    --    end
 
-        columns = columns .. "supplier_code='" .. tbl.supplier_code .. "'"
-    end
+    --    columns = columns .. "supplier_code='" .. tbl.supplier_code .. "'"
+    --end
 
     if nil ~= tbl.contact_name then
         if 0 < string.len(columns) then
@@ -187,17 +187,17 @@ end
 -- errmsg: 失败是,返回失败描述信息
 -- #########################################################################################################
 function business:do_action(tbl)
-    if nil ~= tbl.supplier_code then
+    -- if nil ~= tbl.supplier_code then
         -- 检查名称是否重复
-        local check = require "supplier_check"
-        local result,errmsg = check:name_is_exists(tbl.supplier_code)
-        if true == result then
-            result,errmsg = check:id_name_is_consistent(tbl.supplier_id, tbl.supplier_code)
-            if false == result then
-                return false, "数据库中已有CODE:".. tbl.supplier_code .. "的记录"
-            end
-        end
-    end
+    --    local check = require "supplier_check"
+    --    local result,errmsg = check:name_is_exists(tbl.supplier_code)
+    --    if true == result then
+    --        result,errmsg = check:id_name_is_consistent(tbl.supplier_id, tbl.supplier_code)
+    --        if false == result then
+    --            return false, "数据库中已有CODE:".. tbl.supplier_code .. "的记录"
+    --        end
+    --    end
+    -- end
 
     -- 添加时间戳
     business:add_timestamp(tbl)

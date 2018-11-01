@@ -29,7 +29,21 @@ local business = {}
 -- info: 成功时返回,对象信息
 -- #########################################################################################################
 function business:do_action()
-    return "o-iSb0-zjoztjwlqwjLMCp8WOkhs"
+    local ck = require "cookie"
+    local configure = require "configure"
+
+    local cookie, err = ck:new()
+    if not cookie then
+        ngx.log(ngx.ERR, "cookie new err:" .. err)
+    end
+
+    local open_id = cookie:get(configure.MOBILE.OPEN_ID)
+    if (nil == open_id) or "" == open_id then
+        ngx.log(ngx.DEBUG, "get open id:" .. configure.MOBILE.OPEN_ID .. " from cookie failed")
+        return ""
+    end
+
+    return open_id
 end
 
 return business
